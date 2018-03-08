@@ -1,0 +1,112 @@
+/*region OneClock*/
+#TomatoClockDlg {
+    font-family: 'Microsoft YaHei UI', serif;
+}
+
+#frame {
+    /*border: 1px solid red;*/
+    border-radius: 10px;
+    background-color: #3A4055;
+}
+
+#btn_clock {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+}
+
+.QPushButton:checked {
+    background-color: #f0545e;
+    border: None;
+}
+
+#btn_comp {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
+    border-right: 1px solid white;
+}
+
+#btn_start {
+    background-color: #f0545e;
+    border-radius: 16px;
+    font-size: 10pt;
+    color: white;
+}
+
+#btn_start:hover {
+    border: 1px solid white;
+}
+
+#btn_cancel {
+    background-color: #5550f0;
+    border-radius: 6px;
+    font-size: 8pt;
+    color: white;
+}
+
+#btn_cancel:hover {
+    border: 1px solid white;
+}
+
+#list_mis {
+    color: white;
+    background: #3A4055;
+    font-size: 15pt;
+    alignment: center;
+    border: none;
+}
+
+/*endregion*/
+
+/*region Progress Bar*/
+#clock_progress {
+    /*border: 2px solid grey;*/
+    text-align: center;
+    border-radius: 3px;
+
+    /*width: 5px;*/
+}
+
+#clock_progress::chunk {
+    background-color: #f0545e;
+    width: 20px;
+}
+
+#rest_progress {
+    /*border: 2px solid grey;*/
+    text-align: center;
+    border-radius: 3px;
+
+    /*width: 5px;*/
+}
+
+#rest_progress::chunk {
+    background-color: #f0545e;
+    width: 20px;
+}
+
+#rest_progress QLabel {
+    border-image: url(":/icon/tomato.png");
+    font-family: 'Microsoft YaHei UI', serif;
+    color: white;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+#btn_ignore_rest {
+    background-color: #3A4055;
+    border-radius: 10px;
+    font-size: 10pt;
+    color: white;
+}
+#btn_ignore_rest:hover {
+    border: 1px solid white;
+    background-color: #f0545e;
+    font-weight: bold;
+}
+
+/*endregion*/
