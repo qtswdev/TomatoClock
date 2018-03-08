@@ -108,7 +108,7 @@ class OneClockAddon:
         assert isinstance(mw, AnkiQt)
 
         self.setup_progressbar()
-        self.pb.set_seconds(self.dlg.min)
+        self.pb.set_seconds(self.dlg.min * 60)
         if not self.tm:
             self.tm = Timer(mw)
             self.tm.timeout.connect(self.on_timer)
@@ -154,7 +154,7 @@ class OneClockAddon:
         else:
             self.pb.reset()
 
-        self.pb.set_seconds(self.dlg.min)  # todo  * 60
+        self.pb.set_seconds(self.dlg.min * 60)  # todo
         dock.setWidget(self.pb)
         dock.setTitleBarWidget(QWidget())
 
