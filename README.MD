@@ -11,4 +11,6 @@ Anki 2.0 **ONLY**
 **TODO**
 
 ## Screens
-**TODO**
+![](https://raw.githubusercontent.com/upday7/TomatoClock/master/screenshots/mainwindow.png)
+
+![](https://raw.githubusercontent.com/upday7/TomatoClock/master/screenshots/break_on_window.png)
