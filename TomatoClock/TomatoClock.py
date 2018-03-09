@@ -2,7 +2,6 @@
 # Created: 3/1/2018
 # Project : OneClock
 import os
-import time
 
 from PyQt4.QtCore import Qt, QTimer
 from PyQt4.QtGui import QDockWidget, QWidget, QIcon
@@ -44,7 +43,7 @@ class OneClockAddon:
 
     @staticmethod
     def _set_style_sheet(obj):
-        with open(os.path.join(os.path.dirname(__file__), "ui\designer\style.css"), "r") as f:
+        with open(os.path.join(os.path.dirname(__file__), "ui", "designer", "style.css"), "r") as f:
             obj.setStyleSheet(f.read())
 
     def _connect_slots(self):
