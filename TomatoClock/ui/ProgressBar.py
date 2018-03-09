@@ -17,11 +17,11 @@ class ClockProgress(QProgressBar):
 
         if area in (Qt.LeftDockWidgetArea, Qt.RightDockWidgetArea):
             self.setOrientation(Qt.Vertical)
-            self.setFixedWidth(5)
+            self.setFixedWidth(10)
             self.setTextVisible(False)
         else:
             self.setOrientation(Qt.Horizontal)
-            self.setFixedHeight(5)
+            self.setFixedHeight(10)
             self.setTextVisible(False)
 
     def reset(self):
