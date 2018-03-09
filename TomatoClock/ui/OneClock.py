@@ -7,6 +7,7 @@ from functools import partial
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QListWidgetItem, QDialog, QIcon, QPixmap
 
+from ..ui.SharedControl import WeChatButton
 from aqt import mw
 from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
@@ -73,6 +74,8 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         self.btn_donate.setIcon(QIcon(QPixmap(":/Icon/icons/dollar.png")))
         self.btn_donate.setText("")
         self.btn_donate.clicked.connect(DialogDonate(mw).exec_)
+
+        self.verticalLayout_3.insertWidget(1,WeChatButton(self))
 
     def _adjust_dialog(self):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window | Qt.WA_TranslucentBackground)

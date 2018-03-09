@@ -118,5 +118,16 @@
 #btn_donate {
     border-radius: 8px;
 }
+#btn_wechat{
+    border-radius: 8px;
+}
+
+#btn_donate:hover {
+    border: 1px solid white;
+}
+#btn_wechat:hover {
+    border: 1px solid white;
+}
+
 
 /*endregion*/
