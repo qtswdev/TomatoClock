@@ -168,3 +168,5 @@ class ProfileConfig:
 
     class Meta:
         __store_location__ = _MetaConfigObj.StoreLocation.Profile
+
+    donate_alerted = False

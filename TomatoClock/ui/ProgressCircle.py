@@ -1,9 +1,13 @@
 import math
 
 from PyQt4.QtCore import QTimer, QSize, Qt
-from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton
+from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton, QIcon, \
+    QPixmap
 
+from ..lib.config import ProfileConfig
+from aqt import mw
 from aqt.utils import askUser
+from .DonateWidget20 import DialogDonate
 from ..lib.constant import REST_MINS
 from ..lib.lang import _
 
@@ -62,6 +66,8 @@ class RestDialog(QDialog):
         self.btn_continue = QPushButton(_("IGNORE REST"), self)
         self.btn_continue.setFixedSize(QSize(100, 30))
         self.btn_continue.setObjectName("btn_ignore_rest")
+        if not ProfileConfig.donate_alerted:
+            self.btn_continue.setIcon(QIcon(QPixmap(":/Icon/icons/dollar.png")))
         self.btn_continue.clicked.connect(self.on_btn_ignore_rest)
 
         self.a = 0
@@ -104,6 +110,11 @@ class RestDialog(QDialog):
         super(RestDialog, self).reject()
 
     def on_btn_ignore_rest(self, ):
+        if not ProfileConfig.donate_alerted:
+            DialogDonate(mw).exec_()
+            ProfileConfig.donate_alerted=True
+            self.btn_continue.setIcon(QIcon())
+
         if askUser(u"""
                 <p>""" + _("IGNORE REST QUESTION") + u"""</p>
                 """, self):

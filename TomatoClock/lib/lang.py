@@ -43,6 +43,7 @@ trans = {
     '15 MINUTES': {'zh_CN': u"15分钟", 'en': u'15 Minutes'},
     '20 MINUTES': {'zh_CN': u"20分钟", 'en': u'20 Minutes'},
     '25 MINUTES': {'zh_CN': u"25分钟", 'en': u'25 Minutes'},
+    'SUPPORT DEVELOPMENT': {'zh_CN': u"掏出手机请框框喝咖啡吧！", 'en': u'Donate for Development'},
     'FOCUS MODE REMARK': {'zh_CN': _style + u"<center>专注模式</center>",
                           'en': _style + u'<center>Simplified Layouts</center>'},
     'NORMAL MODE REMARK': {'zh_CN': _style + u"<center>普通模式</center>",

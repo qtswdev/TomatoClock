@@ -5,8 +5,10 @@ import re
 from functools import partial
 
 from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QListWidgetItem, QDialog
+from PyQt4.QtGui import QListWidgetItem, QDialog, QIcon, QPixmap
 
+from aqt import mw
+from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
 from ..lib.lang import _
 
@@ -67,6 +69,10 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
     def _adjust_ui(self):
         self._adjust_min_list()
         self._adjust_dialog()
+
+        self.btn_donate.setIcon(QIcon(QPixmap(":/Icon/icons/dollar.png")))
+        self.btn_donate.setText("")
+        self.btn_donate.clicked.connect(DialogDonate(mw).exec_)
 
     def _adjust_dialog(self):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window | Qt.WA_TranslucentBackground)

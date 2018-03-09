@@ -9,6 +9,7 @@ from PyQt4.QtGui import QDockWidget, QWidget, QIcon
 from aqt import mw
 from aqt.main import AnkiQt
 from .lib.component import anki_overview, anki_reviewer
+from .lib.config import ProfileConfig
 from .lib.constant import MIN_SECS
 from .ui.OneClock import OneClock
 from .ui.ProgressBar import ClockProgress
@@ -51,6 +52,10 @@ class OneClockAddon:
 
     def perform_hooks(self, func):
         func('reviewCleanup', self.on_review_cleanup)
+        func('profileLoaded', self.on_profile_loaded)
+
+    def on_profile_loaded(self):
+        ProfileConfig.donate_alerted = False
 
     def on_review_cleanup(self):
         mw.setWindowIcon(QIcon(":/icons/anki.png"))
