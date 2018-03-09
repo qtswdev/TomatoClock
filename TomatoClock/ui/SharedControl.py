@@ -20,7 +20,8 @@ _style = u"""
 
 trans = {
     'WECHAT CHANNEL': {'zh_CN': u'微信公众号: Anki干货铺', 'en': u'WeChat Channel'},
-    'WECHART CHANNEL WELCOME': {'zh_CN': _style + u'<center>扫一扫关注“Anki干货铺”！</center>',
+    'CLICK CLOSE': {'zh_CN': u'点击关闭此窗口', 'en': u'Click to close'},
+    'WECHART CHANNEL WELCOME': {'zh_CN': _style + u'<center>微信扫一扫关注“Anki干货铺”！QQ群：723233740</center>',
                                 'en': _style + u'<center>Subscribe Anki365</center>'},
 }
 
@@ -48,7 +49,7 @@ class QRDialog(QDialog):
 
         self.l.addWidget(self.image_label)
         self.l.addWidget(QLabel(_("WECHART CHANNEL WELCOME"), self))
-
+        self.setToolTip(_("CLICK CLOSE"))
         self.set_qr(qr_file)
 
     def set_qr(self, qr_file):
