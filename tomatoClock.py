@@ -3,14 +3,15 @@
 # Project : OneClock
 
 from TomatoClock import TomatoClock
+from TomatoClock.lib import constant
 from anki.hooks import addHook
 
 
 def start():
-    if TomatoClock.HAS_SET_UP:
+    if constant.HAS_SET_UP:
         return
     rr = TomatoClock.OneClockAddon()
     rr.perform_hooks(addHook)
-    TomatoClock.HAS_SET_UP = True
+    constant.HAS_SET_UP = True
 
 addHook("profileLoaded", start)

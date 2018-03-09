@@ -2,7 +2,8 @@
 
 # Form implementation generated from reading ui file 'OneClock.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created: Fri Mar 09 14:40:17 2018
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,7 +26,7 @@ except AttributeError:
 class Ui_TomatoClockDlg(object):
     def setupUi(self, TomatoClockDlg):
         TomatoClockDlg.setObjectName(_fromUtf8("TomatoClockDlg"))
-        TomatoClockDlg.resize(315, 366)
+        TomatoClockDlg.resize(315, 461)
         TomatoClockDlg.setStyleSheet(_fromUtf8("/*region OneClock*/\n"
 "#OneClockWidget {\n"
 "    font-family: \'Microsoft YaHei UI\', serif;\n"
@@ -100,8 +101,8 @@ class Ui_TomatoClockDlg(object):
 "}\n"
 "\n"
 "/*endregion*/"))
-        self.gridLayout_2 = QtGui.QGridLayout(TomatoClockDlg)
-        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+        self.gridLayout_3 = QtGui.QGridLayout(TomatoClockDlg)
+        self.gridLayout_3.setObjectName(_fromUtf8("gridLayout_3"))
         self.frame = QtGui.QFrame(TomatoClockDlg)
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
@@ -109,14 +110,15 @@ class Ui_TomatoClockDlg(object):
         self.gridLayout = QtGui.QGridLayout(self.frame)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
         self.verticalLayout = QtGui.QVBoxLayout()
+        self.verticalLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.horizontalLayout_2 = QtGui.QHBoxLayout()
         self.horizontalLayout_2.setObjectName(_fromUtf8("horizontalLayout_2"))
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.horizontalLayout.setSpacing(0)
+        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.btn_clock = QtGui.QPushButton(self.frame)
         self.btn_clock.setMinimumSize(QtCore.QSize(71, 71))
@@ -124,8 +126,8 @@ class Ui_TomatoClockDlg(object):
         self.btn_clock.setStyleSheet(_fromUtf8(""))
         self.btn_clock.setText(_fromUtf8(""))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/clock.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/clock_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/star_off.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/star_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btn_clock.setIcon(icon)
         self.btn_clock.setIconSize(QtCore.QSize(48, 48))
         self.btn_clock.setCheckable(True)
@@ -140,8 +142,8 @@ class Ui_TomatoClockDlg(object):
         self.btn_comp.setStyleSheet(_fromUtf8(""))
         self.btn_comp.setText(_fromUtf8(""))
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/comp.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/comp_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/simple_off.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/simple_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
         self.btn_comp.setIcon(icon1)
         self.btn_comp.setIconSize(QtCore.QSize(48, 48))
         self.btn_comp.setCheckable(True)
@@ -154,9 +156,23 @@ class Ui_TomatoClockDlg(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.central_frame = QtGui.QFrame(self.frame)
+        self.central_frame.setFrameShape(QtGui.QFrame.StyledPanel)
+        self.central_frame.setFrameShadow(QtGui.QFrame.Raised)
+        self.central_frame.setObjectName(_fromUtf8("central_frame"))
+        self.gridLayout_2 = QtGui.QGridLayout(self.central_frame)
+        self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
+        self.verticalLayout_2 = QtGui.QVBoxLayout()
+        self.verticalLayout_2.setObjectName(_fromUtf8("verticalLayout_2"))
+        self.label_remark = QtGui.QLabel(self.central_frame)
+        self.label_remark.setMinimumSize(QtCore.QSize(0, 30))
+        self.label_remark.setMaximumSize(QtCore.QSize(16777215, 30))
+        self.label_remark.setText(_fromUtf8(""))
+        self.label_remark.setObjectName(_fromUtf8("label_remark"))
+        self.verticalLayout_2.addWidget(self.label_remark)
         spacerItem2 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem2)
-        self.list_mis = QtGui.QListWidget(self.frame)
+        self.verticalLayout_2.addItem(spacerItem2)
+        self.list_mis = QtGui.QListWidget(self.central_frame)
         self.list_mis.setMinimumSize(QtCore.QSize(0, 0))
         self.list_mis.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.list_mis.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -172,11 +188,11 @@ class Ui_TomatoClockDlg(object):
         self.list_mis.addItem(item)
         item = QtGui.QListWidgetItem()
         self.list_mis.addItem(item)
-        item = QtGui.QListWidgetItem()
-        self.list_mis.addItem(item)
-        self.verticalLayout.addWidget(self.list_mis)
+        self.verticalLayout_2.addWidget(self.list_mis)
         spacerItem3 = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem3)
+        self.verticalLayout_2.addItem(spacerItem3)
+        self.gridLayout_2.addLayout(self.verticalLayout_2, 0, 0, 1, 1)
+        self.verticalLayout.addWidget(self.central_frame)
         self.horizontalLayout_3 = QtGui.QHBoxLayout()
         self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
         spacerItem4 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
@@ -213,7 +229,7 @@ class Ui_TomatoClockDlg(object):
         self.horizontalLayout_4.addItem(spacerItem7)
         self.verticalLayout.addLayout(self.horizontalLayout_4)
         self.gridLayout.addLayout(self.verticalLayout, 0, 0, 1, 1)
-        self.gridLayout_2.addWidget(self.frame, 0, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.frame, 0, 0, 1, 1)
 
         self.retranslateUi(TomatoClockDlg)
         self.list_mis.setCurrentRow(-1)
@@ -226,14 +242,12 @@ class Ui_TomatoClockDlg(object):
         __sortingEnabled = self.list_mis.isSortingEnabled()
         self.list_mis.setSortingEnabled(False)
         item = self.list_mis.item(0)
-        item.setText(_translate("TomatoClockDlg", "5 Minutes", None))
-        item = self.list_mis.item(1)
         item.setText(_translate("TomatoClockDlg", "10 Minutes", None))
-        item = self.list_mis.item(2)
+        item = self.list_mis.item(1)
         item.setText(_translate("TomatoClockDlg", "15 Minutes", None))
-        item = self.list_mis.item(3)
+        item = self.list_mis.item(2)
         item.setText(_translate("TomatoClockDlg", "20 Minutes", None))
-        item = self.list_mis.item(4)
+        item = self.list_mis.item(3)
         item.setText(_translate("TomatoClockDlg", "25 Minutes", None))
         self.list_mis.setSortingEnabled(__sortingEnabled)
         self.btn_start.setText(_translate("TomatoClockDlg", "Start", None))

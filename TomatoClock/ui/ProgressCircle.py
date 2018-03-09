@@ -4,6 +4,7 @@ from PyQt4.QtCore import QTimer, QSize, Qt
 from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton
 
 from aqt.utils import askUser
+from ..lib.constant import REST_MINS
 from ..lib.lang import _
 
 
@@ -94,7 +95,7 @@ class RestDialog(QDialog):
         self.pr.setRange(0, self.total_secs)
 
     def exec_(self):
-        self.start(5 * 60)
+        self.start(REST_MINS * 60)
         return super(RestDialog, self).exec_()
 
     def reject(self):

@@ -2,65 +2,18 @@
 # Created: 3/1/2018
 # Project : OneClock
 import os
+import time
 
 from PyQt4.QtCore import Qt, QTimer
-from PyQt4.QtGui import QDockWidget, QWidget
+from PyQt4.QtGui import QDockWidget, QWidget, QIcon
 
-import anki.lang
 from aqt import mw
 from aqt.main import AnkiQt
-from aqt.overview import Overview
-from .ui.ClockProgress import ClockProgress
-from .ui.ProgressCircle import RestDialog
-
-HAS_SET_UP = False
-
+from .lib.component import anki_overview, anki_reviewer
+from .lib.constant import MIN_SECS
 from .ui.OneClock import OneClock
-
-assert isinstance(mw, AnkiQt)
-
-
-class overview(Overview):
-    def __init__(self, tomato_dlg):
-        super(overview, self).__init__(mw)
-        self.dlg = tomato_dlg
-
-    def _linkHandler(self, url):
-        if url == 'tomato_clock':
-            # self.dlg.setWindowOpacity(0.9)
-            self.dlg.btn_start.setText(anki.lang._("Study Now"))
-            accepted = self.dlg.exec_()
-
-            if accepted:
-                url = "study"
-        super(overview, self)._linkHandler(url)
-
-    def _table(self):
-        counts = list(self.mw.col.sched.counts())
-        finished = not sum(counts)
-        for n in range(len(counts)):
-            if counts[n] >= 1000:
-                counts[n] = "1000+"
-        but = self.mw.button
-        if finished:
-            return '<div style="white-space: pre-wrap;">%s</div>' % (
-                self.mw.col.sched.finishedMsg())
-        else:
-            return '''
-<table width=300 cellpadding=5>
-<tr><td align=center valign=top>
-<table cellspacing=5>
-<tr><td>%s:</td><td><b><font color=#00a>%s</font></b></td></tr>
-<tr><td>%s:</td><td><b><font color=#C35617>%s</font></b></td></tr>
-<tr><td>%s:</td><td><b><font color=#0a0>%s</font></b></td></tr>
-</table>
-</td><td align=center>
-%s</td></table>''' % (
-                anki.lang._("New"), counts[0],
-                anki.lang._("Learning"), counts[1],
-                anki.lang._("To Review"), counts[2],
-                but("tomato_clock", anki.lang._("Study Now"), id="study"),
-            )
+from .ui.ProgressBar import ClockProgress
+from .ui.ProgressCircle import RestDialog
 
 
 class Timer(QTimer):
@@ -78,13 +31,19 @@ class OneClockAddon:
         self._set_style_sheet(mw)
         self.tm = None
         self.dlg_rest = None
+        self.pb_w = None
 
-        self.setup_overview()
+        self.replace_mw_overview()
+        self.replace_mw_reviewer()
 
-    def setup_overview(self):
-        mw.overview = overview(self.dlg)
+    def replace_mw_overview(self):
+        mw.overview = anki_overview(self.dlg)
 
-    def _set_style_sheet(self, obj):
+    def replace_mw_reviewer(self):
+        mw.reviewer = anki_reviewer(self.dlg.mode)
+
+    @staticmethod
+    def _set_style_sheet(obj):
         with open(os.path.join(os.path.dirname(__file__), "ui\designer\style.css"), "r") as f:
             obj.setStyleSheet(f.read())
 
@@ -92,23 +51,28 @@ class OneClockAddon:
         self.dlg.btn_start.clicked.connect(self.on_btn_start_clicked)
 
     def perform_hooks(self, func):
-        func('reviewCleanup', self.on_reviewCleanup)
+        func('reviewCleanup', self.on_review_cleanup)
 
-    def on_reviewCleanup(self):
+    def on_review_cleanup(self):
+        mw.setWindowIcon(QIcon(":/icons/anki.png"))
         if self.tm and self.tm.isActive():
             self.tm.stop()
         if self.pb:
-            self.pb.hide()
+            self.pb_w.hide()
             self.pb.reset()
 
         if self.dlg_rest:
             self.dlg_rest.hide()
 
+        mw.reviewer.restore_layouts()
+
     def on_btn_start_clicked(self):
+        self.replace_mw_reviewer()
+        mw.setWindowIcon(QIcon(":/icon/tomato.png"))
         assert isinstance(mw, AnkiQt)
 
         self.setup_progressbar()
-        self.pb.set_seconds(self.dlg.min * 60)
+        self.pb.set_seconds(self.dlg.min * MIN_SECS)
         if not self.tm:
             self.tm = Timer(mw)
             self.tm.timeout.connect(self.on_timer)
@@ -119,7 +83,7 @@ class OneClockAddon:
 
     def on_tomato(self):
         self.tm.stop()
-        self.pb.hide()
+        self.pb_w.hide()
         self.pb.reset()
         mw.moveToState("overview")
         if not self.dlg_rest:
@@ -129,7 +93,8 @@ class OneClockAddon:
             self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
         self.dlg_rest.exec_()
 
-    def on_dlg_rest_accepted(self):
+    @staticmethod
+    def on_dlg_rest_accepted():
         mw.overview._linkHandler("tomato_clock")
 
     def on_dlg_rest_rejected(self):
@@ -137,7 +102,7 @@ class OneClockAddon:
 
     def on_timer(self):
         if self.pb:
-            self.pb.show()
+            self.pb_w.show()
             self.pb.on_timer()
 
     def setup_progressbar(self):
@@ -146,17 +111,20 @@ class OneClockAddon:
         # dockArea = Qt.LeftDockWidgetArea
         # dockArea = Qt.BottomDockWidgetArea
 
-        dock = QDockWidget()
-        dock.setObjectName("progress_dock")
+        self.pb_w = QDockWidget(mw)
+        self.pb_w.setObjectName("progress_dock")
         if not self.pb:
             self.pb = ClockProgress(mw, dockArea)
             self.pb.tomato.connect(self.on_tomato)
         else:
             self.pb.reset()
 
-        self.pb.set_seconds(self.dlg.min * 60)  # todo
-        dock.setWidget(self.pb)
-        dock.setTitleBarWidget(QWidget())
+        self.pb.set_seconds(self.dlg.min * MIN_SECS)
+        self.pb_w.setWidget(self.pb)
+        w = QWidget(self.pb_w)
+        w.setFixedHeight(self.pb.height())
+        self.pb_w.setTitleBarWidget(w)
+        self.pb_w.setFeatures(QDockWidget.NoDockWidgetFeatures)
 
         ## Note: if there is another widget already in this dock position, we have to add ourself to the list
 
@@ -164,7 +132,7 @@ class OneClockAddon:
         existing_widgets = [widget for widget in mw.findChildren(QDockWidget) if mw.dockWidgetArea(widget) == dockArea]
 
         # then add ourselves
-        mw.addDockWidget(dockArea, dock)
+        mw.addDockWidget(dockArea, self.pb_w)
 
         # stack with any existing widgets
         if len(existing_widgets) > 0:
@@ -174,7 +142,7 @@ class OneClockAddon:
                 stack_method = Qt.Vertical
             if dockArea == Qt.LeftDockWidgetArea or dockArea == Qt.RightDockWidgetArea:
                 stack_method = Qt.Horizontal
-            mw.splitDockWidget(existing_widgets[0], dock, stack_method)
+            mw.splitDockWidget(existing_widgets[0], self.pb_w, stack_method)
 
         mw.web.setFocus()
         self._set_style_sheet(self.pb)

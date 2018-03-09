@@ -19,18 +19,36 @@
 
 from anki.lang import currentLang
 
+_style = u"""
+<style>
+
+* {
+    font-family: 'Microsoft YaHei UI', Consolas, serif;
+}
+
+</style>
+
+"""
+
 trans = {
     'TOMATO COLOCK': {'zh_CN': u'番茄时钟', 'en': u'Tomato Clock'},
     'IGNORE REST': {'zh_CN': u'跳过休息', 'en': u'Continue'},
     'REST': {'zh_CN': u"休息", 'en': u'Break'},
     'IGNORE REST QUESTION': {'zh_CN': u"跳过休息吗？", 'en': u'Ignore break and continue?'},
+    'ABORT TOMATO': {'zh_CN': u"中断番茄专注吗？", 'en': u'Abort Tomato Clock?'},
     'CANCEL': {'zh_CN': u"取消", 'en': u'Back'},
+    'RETURN': {'zh_CN': u"返回", 'en': u'Return'},
     '5 MINUTES': {'zh_CN': u"5分钟", 'en': u'5 Minutes'},
     '10 MINUTES': {'zh_CN': u"10分钟", 'en': u'10 Minutes'},
     '15 MINUTES': {'zh_CN': u"15分钟", 'en': u'15 Minutes'},
     '20 MINUTES': {'zh_CN': u"20分钟", 'en': u'20 Minutes'},
     '25 MINUTES': {'zh_CN': u"25分钟", 'en': u'25 Minutes'},
+    'FOCUS MODE REMARK': {'zh_CN': _style + u"<center>专注模式</center>",
+                          'en': _style + u'<center>Simplified Layouts</center>'},
+    'NORMAL MODE REMARK': {'zh_CN': _style + u"<center>普通模式</center>",
+                           'en': _style + u'<center>Normal Layouts</center>'},
 }
+
 
 def _(key, lang=currentLang):
     key = key.upper().strip()

@@ -1,9 +1,9 @@
 <RCC>
   <qresource prefix="icon">
+    <file>simple_off.png</file>
+    <file>simple_on.png</file>
+    <file>star_off.png</file>
+    <file>star_on.png</file>
     <file>tomato.png</file>
-    <file>clock.png</file>
-    <file>clock_on.png</file>
-    <file>comp.png</file>
-    <file>comp_on.png</file>
   </qresource>
 </RCC>
