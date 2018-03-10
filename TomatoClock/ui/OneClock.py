@@ -76,11 +76,11 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
 
         self.btn_donate.setIcon(QIcon(QPixmap(":/Icon/icons/dollar.png")))
         self.btn_donate.setText("")
-        self.btn_donate.clicked.connect(DialogDonate(mw).exec_)
+        self.btn_donate.clicked.connect(partial(DialogDonate(mw).exec_))
 
         self.btn_setting.setIcon(QIcon(QPixmap(":/icon/setting.png")))
         self.btn_setting.setText("")
-        self.btn_setting.clicked.connect(ConfigEditor(mw, UserConfig.media_json_file).exec_)
+        self.btn_setting.clicked.connect(partial(ConfigEditor(mw, UserConfig.media_json_file).exec_))
 
         self.updater = AddonUpdater(
             self,

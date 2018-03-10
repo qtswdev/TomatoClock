@@ -231,6 +231,7 @@ class QRDialog(QDialog):
     def mousePressEvent(self, evt):
         self.accept()
 
+
 class ConfigEditor(QDialog):
     class Ui_Dialog(object):
         def setupUi(self, Dialog):
@@ -269,13 +270,16 @@ class ConfigEditor(QDialog):
         self.conf = None
         self.form = self.Ui_Dialog()
         self.form.setupUi(self)
-        self.updateText()
 
     def updateText(self):
         with open(self.json, "r") as f:
             self.conf = json.load(f)
         self.form.editor.setPlainText(
             json.dumps(self.conf, sort_keys=True, indent=4, separators=(',', ': ')))
+
+    def exec_(self):
+        self.updateText()
+        super(ConfigEditor, self).exec_()
 
     def accept(self):
         txt = self.form.editor.toPlainText()
@@ -289,6 +293,7 @@ class ConfigEditor(QDialog):
             json.dump(self.conf, f)
 
         super(ConfigEditor, self).accept()
+
 
 # endregion
 
