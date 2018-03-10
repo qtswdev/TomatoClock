@@ -259,7 +259,10 @@ class WeChatButton(_ImageButton):
     def ensure_qr(self):
         if not os.path.isfile(self._qr_file_nm):
             qr_url = "https://raw.githubusercontent.com/upday7/LiveCodeHub/master/WeChartQR.jpg"
-            urlretrieve(qr_url, self._qr_file_nm)
+            try:
+                urlretrieve(qr_url, self._qr_file_nm)
+            except:
+                pass
 
     def on_clicked(self):
         self.ensure_qr()
@@ -285,7 +288,11 @@ class MoreAddonButton(_ImageButton):
             self.json_file = json_file
 
         def run(self):
-            urlretrieve("https://raw.githubusercontent.com/upday7/LiveCodeHub/master/more_addons.json", self.json_file)
+            try:
+                urlretrieve("https://raw.githubusercontent.com/upday7/LiveCodeHub/master/more_addons.json",
+                            self.json_file)
+            except:
+                pass
 
     def __init__(self, parent):
         super(MoreAddonButton, self).__init__(parent, ":/icon/more.png")
@@ -495,7 +502,10 @@ class MoreAddonMenu(QMenu):
         super(MoreAddonMenu, self).__init__(parent)
         self.setObjectName("more_addon_menu")
         with open(config_json, "r") as f:
-            self.config_json = json.load(f, encoding="utf-8")
+            try:
+                self.config_json = json.load(f, encoding="utf-8")
+            except:
+                return
         self.pharse()
 
     def pharse(self):

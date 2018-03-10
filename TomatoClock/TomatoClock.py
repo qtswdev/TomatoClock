@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-# Created: 3/1/2018
-# Project : OneClock
+
 import os
 
 from PyQt4.QtCore import Qt, QTimer
