@@ -84,7 +84,7 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
 
         self.updater = AddonUpdater(
             self,
-            _("TOMATO CLOCK"),
+            _("TOMATO COLOCK"),
             1608644302,
             "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/constant.py",
             "",

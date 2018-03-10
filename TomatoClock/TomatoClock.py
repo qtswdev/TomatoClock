@@ -9,7 +9,7 @@ from anki.sound import play
 from aqt import mw
 from aqt.main import AnkiQt
 from .lib.component import anki_overview, anki_reviewer
-from .lib.config import ProfileConfig
+from .lib.config import ProfileConfig, UserConfig
 from .lib.constant import MIN_SECS, __version__
 from .lib.sounds import BREAK
 from .ui.BreakDialog import RestDialog
@@ -23,6 +23,7 @@ class Timer(QTimer):
         self.setInterval(1000)
 
 
+# noinspection PyStatementEffect
 class OneClockAddon:
 
     def __init__(self):
@@ -57,6 +58,7 @@ class OneClockAddon:
 
     def on_profile_loaded(self):
         ProfileConfig.donate_alerted = False
+        UserConfig.REST_MINUTES # just ensure json file is generated
 
     def on_review_cleanup(self):
         mw.setWindowIcon(QIcon(":/icons/anki.png"))
