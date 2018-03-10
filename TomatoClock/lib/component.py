@@ -6,15 +6,15 @@ import json
 from PyQt4.QtCore import Qt
 
 import anki.lang
-from ..lib.sounds import ABORT
 from anki.lang import _
 from anki.sound import play
 from aqt import mw
 from aqt.overview import Overview
 from aqt.reviewer import Reviewer
 from aqt.utils import askUser
-from .constant import TIME_LIMIT
+from .config import UserConfig
 from .lang import _ as _2
+from ..lib.sounds import ABORT
 
 
 class anki_overview(Overview):
@@ -87,7 +87,7 @@ class anki_reviewer(Reviewer):
             middle = "<table cellpadding=0><tr><td class=stat2 align=center>%s</td></tr></table>" % middle
 
             self.bottom.web.eval("showQuestion(%s,%d);" % (
-                json.dumps(middle), TIME_LIMIT))
+                json.dumps(middle), UserConfig.TIME_LIMIT_SECONDS))
         else:
             super(anki_reviewer, self)._showAnswerButton()
 

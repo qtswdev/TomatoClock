@@ -4,14 +4,14 @@ from PyQt4.QtCore import QTimer, QSize, Qt
 from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton, QIcon, \
     QPixmap
 
-from ..lib.sounds import REST_START
 from anki.sound import play
-from ..lib.config import ProfileConfig
 from aqt import mw
 from aqt.utils import askUser
 from .DonateWidget20 import DialogDonate
-from ..lib.constant import REST_MINS, MIN_SECS
+from ..lib.config import ProfileConfig, UserConfig
+from ..lib.constant import MIN_SECS
 from ..lib.lang import _
+from ..lib.sounds import REST_START
 
 
 class RoundProgress(QProgressBar):
@@ -103,8 +103,9 @@ class RestDialog(QDialog):
         self.total_secs = secs
         self.pr.setRange(0, self.total_secs)
 
-    def exec_(self):
-        self.start(REST_MINS * MIN_SECS)
+    # noinspection PyMethodOverriding
+    def exec_(self, tomato_min):
+        self.start(UserConfig.REST_MINUTES.get(str(tomato_min), 5) * MIN_SECS)
         play(REST_START)
         return super(RestDialog, self).exec_()
 
@@ -116,7 +117,7 @@ class RestDialog(QDialog):
     def on_btn_ignore_rest(self, ):
         if not ProfileConfig.donate_alerted:
             DialogDonate(mw).exec_()
-            ProfileConfig.donate_alerted=True
+            ProfileConfig.donate_alerted = True
             self.btn_continue.setIcon(QIcon())
 
         if askUser(u"""

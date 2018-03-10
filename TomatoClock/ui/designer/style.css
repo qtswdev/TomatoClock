@@ -115,6 +115,14 @@
     font-weight: bold;
 }
 
+#btn_setting {
+    border-radius: 8px;
+}
+
+#btn_setting:hover {
+    border: 1px solid white;
+}
+
 #btn_donate {
     border-radius: 8px;
 }

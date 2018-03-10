@@ -170,3 +170,19 @@ class ProfileConfig:
         __store_location__ = _MetaConfigObj.StoreLocation.Profile
 
     donate_alerted = False
+
+
+class UserConfig:
+    __metaclass__ = _MetaConfigObj
+
+    class Meta:
+        __store_location__ = _MetaConfigObj.StoreLocation.MediaFolder
+        __config_file__ = "_tmtclock.json"
+
+    TIME_LIMIT_SECONDS = 60
+    REST_MINUTES = {
+        10: 2,
+        15: 3,
+        20: 4,
+        25: 5
+    }

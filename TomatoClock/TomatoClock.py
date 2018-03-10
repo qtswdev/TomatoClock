@@ -97,7 +97,7 @@ class OneClockAddon:
             self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
             self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
         play(BREAK)
-        self.dlg_rest.exec_()
+        self.dlg_rest.exec_(self.dlg.min)
 
     @staticmethod
     def on_dlg_rest_accepted():

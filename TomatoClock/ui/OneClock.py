@@ -6,14 +6,15 @@ from functools import partial
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QListWidgetItem, QDialog, QIcon, QPixmap
 
-from ..lib.sounds import PAGE
 from anki.sound import play
 from aqt import mw
 from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
+from ..lib.config import UserConfig
 from ..lib.constant import __version__
 from ..lib.lang import _
-from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton
+from ..lib.sounds import PAGE
+from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor
 
 
 class OneClock(QDialog, Ui_TomatoClockDlg):
@@ -76,6 +77,10 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         self.btn_donate.setIcon(QIcon(QPixmap(":/Icon/icons/dollar.png")))
         self.btn_donate.setText("")
         self.btn_donate.clicked.connect(DialogDonate(mw).exec_)
+
+        self.btn_setting.setIcon(QIcon(QPixmap(":/icon/setting.png")))
+        self.btn_setting.setText("")
+        self.btn_setting.clicked.connect(ConfigEditor(mw, UserConfig.media_json_file).exec_)
 
         self.updater = AddonUpdater(
             self,

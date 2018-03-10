@@ -7,7 +7,7 @@ from anki.lang import currentLang
 from aqt import *
 from aqt.downloader import download
 # noinspection PyArgumentList
-from aqt.utils import openLink
+from aqt.utils import openLink, showInfo
 
 try:
     import urllib2 as web
@@ -39,6 +39,7 @@ trans = {
     'UPDATE OK': {'zh_CN': u'更新成功，请重启启动Anki。', 'en': u"'Upgraded to the latest version, please restart Anki.'"},
     'MORE ADDON': {'zh_CN': u'更多插件', 'en': u"More Add-On"},
     'CLICK CLOSE': {'zh_CN': u'点击关闭此窗口', 'en': u'Click to close'},
+    'CONFIGURATION': {'zh_CN': u'设置', 'en': u'Configuration'},
     'WECHART CHANNEL WELCOME': {'zh_CN': _style + u'<center>微信扫一扫关注“Anki干货铺”！QQ群：723233740</center>',
                                 'en': _style + u'<center>Subscribe Anki365</center>'},
 }
@@ -230,6 +231,64 @@ class QRDialog(QDialog):
     def mousePressEvent(self, evt):
         self.accept()
 
+class ConfigEditor(QDialog):
+    class Ui_Dialog(object):
+        def setupUi(self, Dialog):
+            Dialog.setObjectName("Dialog")
+            Dialog.setWindowModality(Qt.ApplicationModal)
+            Dialog.resize(631, 521)
+            self.verticalLayout = QVBoxLayout(Dialog)
+            self.verticalLayout.setObjectName("verticalLayout")
+            self.editor = QPlainTextEdit(Dialog)
+            sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            sizePolicy.setHorizontalStretch(0)
+            sizePolicy.setVerticalStretch(3)
+            sizePolicy.setHeightForWidth(self.editor.sizePolicy().hasHeightForWidth())
+            self.editor.setSizePolicy(sizePolicy)
+            self.editor.setObjectName("editor")
+            self.verticalLayout.addWidget(self.editor)
+            self.buttonBox = QDialogButtonBox(Dialog)
+            self.buttonBox.setOrientation(Qt.Horizontal)
+            self.buttonBox.setStandardButtons(
+                QDialogButtonBox.Cancel | QDialogButtonBox.Ok)
+            self.buttonBox.setObjectName("buttonBox")
+            self.verticalLayout.addWidget(self.buttonBox)
+
+            self.retranslateUi(Dialog)
+            self.buttonBox.accepted.connect(Dialog.accept)
+            self.buttonBox.rejected.connect(Dialog.reject)
+            QMetaObject.connectSlotsByName(Dialog)
+
+        def retranslateUi(self, Dialog):
+            _translate = QCoreApplication.translate
+            Dialog.setWindowTitle(_("CONFIGURATION"))
+
+    def __init__(self, dlg, json_file):
+        super(ConfigEditor, self).__init__(dlg)
+        self.json = json_file
+        self.conf = None
+        self.form = self.Ui_Dialog()
+        self.form.setupUi(self)
+        self.updateText()
+
+    def updateText(self):
+        with open(self.json, "r") as f:
+            self.conf = json.load(f)
+        self.form.editor.setPlainText(
+            json.dumps(self.conf, sort_keys=True, indent=4, separators=(',', ': ')))
+
+    def accept(self):
+        txt = self.form.editor.toPlainText()
+        try:
+            self.conf = json.loads(txt)
+        except Exception as e:
+            showInfo(_("Invalid configuration: ") + repr(e))
+            return
+
+        with open(self.json, "w") as f:
+            json.dump(self.conf, f)
+
+        super(ConfigEditor, self).accept()
 
 # endregion
 
