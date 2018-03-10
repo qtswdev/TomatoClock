@@ -128,6 +128,19 @@
 #btn_wechat:hover {
     border: 1px solid white;
 }
+#btn_more{
+    border-radius: 8px;
+}
+#btn_more:hover {
+    border: 1px solid white;
+}
+#btn_updater{
+    border-radius: 10px;
+    background-color: #717da6;
+}
+#btn_updater:hover {
+    border: 1px solid white;
+}
 
 
 /*endregion*/

@@ -7,11 +7,12 @@ from functools import partial
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QListWidgetItem, QDialog, QIcon, QPixmap
 
-from ..ui.SharedControl import WeChatButton
 from aqt import mw
 from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
+from ..lib.constant import __version__
 from ..lib.lang import _
+from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton
 
 
 class OneClock(QDialog, Ui_TomatoClockDlg):
@@ -75,7 +76,17 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         self.btn_donate.setText("")
         self.btn_donate.clicked.connect(DialogDonate(mw).exec_)
 
-        self.verticalLayout_3.insertWidget(1,WeChatButton(self))
+        self.updater = AddonUpdater(
+            self,
+            _("TOMATO CLOCK"),
+            1608644302,
+            "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/constant.py",
+            "",
+            mw.pm.addonFolder(),
+            __version__
+        )
+        self.verticalLayout_3.insertWidget(1, WeChatButton(self))
+        self.verticalLayout_4.insertWidget(0, UpgradeButton(self, self.updater))
 
     def _adjust_dialog(self):
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window | Qt.WA_TranslucentBackground)
@@ -101,3 +112,8 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         if not toggled:
             mode = 1 if not mode else 0
         self.mode = mode
+
+    def exec_(self):
+        if not self.updater.isRunning():
+            self.updater.start()
+        return super(OneClock, self).exec_()
