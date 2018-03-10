@@ -277,9 +277,11 @@ class WeChatButton(_ImageButton):
 
 class MoreAddonButton(_ImageButton):
     pass
+
+
 class UpgradeButton(_ImageButton):
-    def __init__(self, parent,updater):
-        super(UpgradeButton, self).__init__(parent,":/icon/alert.png")
+    def __init__(self, parent, updater):
+        super(UpgradeButton, self).__init__(parent, ":/icon/alert.png")
         self.setObjectName("btn_updater")
         self.setToolTip(_("NEW VERSION ALERT"))
         self.updater = updater
@@ -288,8 +290,8 @@ class UpgradeButton(_ImageButton):
         self.setVisible(False)
         self.clicked.connect(self.on_clicked)
 
-    def on_addon_new_version(self):
-        self.setVisible(True)
+    def on_addon_new_version(self, new_version_available):
+        self.setVisible(new_version_available)
 
     def on_addon_updated(self, success):
         if success:
