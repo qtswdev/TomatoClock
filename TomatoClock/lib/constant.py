@@ -4,6 +4,6 @@
 
 HAS_SET_UP = False  # type: bool
 MIN_SECS = 60
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 TIME_LIMIT = 60 * 1000
 REST_MINS = 5
