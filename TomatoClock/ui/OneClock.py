@@ -12,7 +12,7 @@ from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
 from ..lib.constant import __version__
 from ..lib.lang import _
-from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton
+from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton
 
 
 class OneClock(QDialog, Ui_TomatoClockDlg):
@@ -86,6 +86,7 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
             __version__
         )
         self.verticalLayout_3.insertWidget(1, WeChatButton(self))
+        self.verticalLayout_3.insertWidget(2, MoreAddonButton(self))
         self.verticalLayout_4.insertWidget(0, UpgradeButton(self, self.updater))
 
     def _adjust_dialog(self):

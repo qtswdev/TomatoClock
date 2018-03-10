@@ -118,29 +118,67 @@
 #btn_donate {
     border-radius: 8px;
 }
-#btn_wechat{
+
+#btn_wechat {
     border-radius: 8px;
 }
 
 #btn_donate:hover {
     border: 1px solid white;
 }
+
 #btn_wechat:hover {
     border: 1px solid white;
 }
-#btn_more{
+
+#btn_more_addon {
     border-radius: 8px;
 }
-#btn_more:hover {
+
+#btn_more_addon:hover {
     border: 1px solid white;
 }
-#btn_updater{
+
+#btn_updater {
     border-radius: 10px;
     background-color: #717da6;
 }
+
 #btn_updater:hover {
     border: 1px solid white;
 }
 
+QPushButton::menu-indicator {
+    width: 0;
+}
+
+#more_addon_menu {
+    background-color: #f0545e; /* sets background of the menu */
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+}
+
+#more_addon_menu::item {
+    background-color: transparent;
+}
+
+#more_addon_menu::item:selected {
+    background-color: #f0313c;
+}
+
+#more_addon_menu > QMenu {
+    background-color: #f0545e;
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+}
+
+#more_addon_menu > QMenu::item {
+    background-color: transparent;
+}
+
+#more_addon_menu > QMenu::item:selected {
+}
 
 /*endregion*/
