@@ -10,7 +10,7 @@ from aqt import mw
 from aqt.main import AnkiQt
 from .lib.component import anki_overview, anki_reviewer
 from .lib.config import ProfileConfig
-from .lib.constant import MIN_SECS
+from .lib.constant import MIN_SECS, __version__
 from .lib.sounds import BREAK
 from .ui.BreakDialog import RestDialog
 from .ui.OneClock import OneClock

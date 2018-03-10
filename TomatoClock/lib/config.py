@@ -170,6 +170,7 @@ class ProfileConfig:
         __store_location__ = _MetaConfigObj.StoreLocation.Profile
 
     donate_alerted = False
+    ttc_current_version=""
 
 
 class UserConfig:

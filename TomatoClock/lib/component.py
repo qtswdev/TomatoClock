@@ -4,16 +4,19 @@
 import json
 
 from PyQt4.QtCore import Qt
+from PyQt4.QtGui import QMessageBox
 
 import anki.lang
+from TomatoClock.lib.constant import UPDATE_LOGS, __version__
 from anki.lang import _
 from anki.sound import play
 from aqt import mw
 from aqt.overview import Overview
 from aqt.reviewer import Reviewer
 from aqt.utils import askUser
-from .config import UserConfig
+from .config import UserConfig, ProfileConfig
 from .lang import _ as _2
+from ..lib.lang import _ as trans, currentLang
 from ..lib.sounds import ABORT, HALF_TIME, TIMEOUT
 
 
@@ -21,9 +24,12 @@ class anki_overview(Overview):
     def __init__(self, tomato_dlg):
         super(anki_overview, self).__init__(mw)
         self.dlg = tomato_dlg
+        self.addon_version = __version__
+        self.update_logs = UPDATE_LOGS
 
     def _linkHandler(self, url):
         if url == 'tomato_clock':
+            self.show_update_logs()
             # self.dlg.setWindowOpacity(0.9)
             self.dlg.btn_start.setText(anki.lang._("Study Now"))
             accepted = self.dlg.exec_()
@@ -31,6 +37,18 @@ class anki_overview(Overview):
             if accepted:
                 url = "study"
         super(anki_overview, self)._linkHandler(url)
+
+    def show_update_logs(self):
+        if  ProfileConfig.ttc_current_version != self.addon_version:
+            for logs in self.update_logs:
+                cur_log_ver, cur_update_msg = logs
+                if cur_log_ver != self.addon_version:
+                    continue
+                QMessageBox.warning(mw, trans("TOMATO COLOCK"), u"""
+                <p><b>v{} {}:</b></p>
+                <p>{}</p>
+                """.format(cur_log_ver, u"更新" if currentLang == "zh_CN" else u"Update", cur_update_msg))
+                ProfileConfig.ttc_current_version = self.addon_version
 
     def _table(self):
         counts = list(self.mw.col.sched.counts())
