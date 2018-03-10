@@ -5,14 +5,16 @@ import os
 from PyQt4.QtCore import Qt, QTimer
 from PyQt4.QtGui import QDockWidget, QWidget, QIcon
 
+from anki.sound import play
 from aqt import mw
 from aqt.main import AnkiQt
 from .lib.component import anki_overview, anki_reviewer
 from .lib.config import ProfileConfig
 from .lib.constant import MIN_SECS
+from .lib.sounds import BREAK
+from .ui.BreakDialog import RestDialog
 from .ui.OneClock import OneClock
 from .ui.ProgressBar import ClockProgress
-from .ui.ProgressCircle import RestDialog
 
 
 class Timer(QTimer):
@@ -94,6 +96,7 @@ class OneClockAddon:
             self._set_style_sheet(self.dlg_rest)
             self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
             self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
+        play(BREAK)
         self.dlg_rest.exec_()
 
     @staticmethod

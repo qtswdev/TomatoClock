@@ -4,11 +4,13 @@ from PyQt4.QtCore import QTimer, QSize, Qt
 from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton, QIcon, \
     QPixmap
 
+from ..lib.sounds import REST_START
+from anki.sound import play
 from ..lib.config import ProfileConfig
 from aqt import mw
 from aqt.utils import askUser
 from .DonateWidget20 import DialogDonate
-from ..lib.constant import REST_MINS
+from ..lib.constant import REST_MINS, MIN_SECS
 from ..lib.lang import _
 
 
@@ -85,12 +87,13 @@ class RestDialog(QDialog):
         self.a += 1
         self.pr.setValue(self.a)
 
-        min = self.a // 60
-        secs = self.a - min * 60
+        min = self.a // MIN_SECS
+        secs = self.a - min * MIN_SECS
 
         self.pr.label.setText(
             u"<center>" + _("REST") + u"<br>" + u"{}:{}".format(str(min).zfill(2), str(secs).zfill(2)) + u"</center>"
         )
+
         if self.a == self.total_secs:
             self.timer.stop()
             self.accept()
@@ -101,7 +104,8 @@ class RestDialog(QDialog):
         self.pr.setRange(0, self.total_secs)
 
     def exec_(self):
-        self.start(REST_MINS * 60)
+        self.start(REST_MINS * MIN_SECS)
+        play(REST_START)
         return super(RestDialog, self).exec_()
 
     def reject(self):

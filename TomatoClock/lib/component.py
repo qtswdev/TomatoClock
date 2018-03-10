@@ -6,7 +6,9 @@ import json
 from PyQt4.QtCore import Qt
 
 import anki.lang
+from ..lib.sounds import ABORT
 from anki.lang import _
+from anki.sound import play
 from aqt import mw
 from aqt.overview import Overview
 from aqt.reviewer import Reviewer
@@ -71,7 +73,7 @@ class anki_reviewer(Reviewer):
         mw.activateWindow()
         mw.toolbar.web.show()
 
-    def _showAnswerButton(self):
+    def _showAnswerButton(self, ):
         if not self.mode:
             self._bottomReady = True
             if not self.typeCorrect:
@@ -99,6 +101,7 @@ class anki_reviewer(Reviewer):
 
     def _linkHandler(self, url):
         if url == "decks":
+            play(ABORT)
             if askUser(
                     _2("ABORT TOMATO"), mw
             ):
@@ -205,5 +208,23 @@ class anki_reviewer(Reviewer):
 
     def _initWeb(self):
         super(anki_reviewer, self)._initWeb()
+
+        # region ensure html  is shown ...
+
         self._showAnswerButton()
-        self._showQuestion()
+
+        # warning below is just an copy of _showQuestion function of anki2.0.48
+        # to execute this because the reviewer and bottm html cannot be shown at the first time
+
+        c = self.card
+        # grab the question and play audio
+        if c.isEmpty():
+            q = _("""The front of this card is empty. Please run Tools>Empty Cards.""")
+        else:
+            q = c.q()
+        # render & update bottom
+        q = self._mungeQA(q)
+        klass = "card card%d" % (c.ord + 1)
+        self.web.eval("_updateQA(%s, false, '%s');" % (json.dumps(q), klass))
+
+        # endregion

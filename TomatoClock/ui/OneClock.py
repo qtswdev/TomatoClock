@@ -6,6 +6,8 @@ from functools import partial
 from PyQt4.QtCore import Qt
 from PyQt4.QtGui import QListWidgetItem, QDialog, QIcon, QPixmap
 
+from ..lib.sounds import PAGE
+from anki.sound import play
 from aqt import mw
 from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
@@ -116,4 +118,5 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
     def exec_(self):
         if not self.updater.isRunning():
             self.updater.start()
+        play(PAGE)
         return super(OneClock, self).exec_()
