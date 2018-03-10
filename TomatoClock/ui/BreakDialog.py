@@ -4,7 +4,7 @@ from PyQt4.QtCore import QTimer, QSize, Qt
 from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton, QIcon, \
     QPixmap
 
-from anki.sound import play
+from anki.sound import play,clearAudioQueue
 from aqt import mw
 from aqt.utils import askUser
 from .DonateWidget20 import DialogDonate
@@ -39,14 +39,14 @@ class RoundProgress(QProgressBar):
         painter.setPen(pen)
         pen = QPen()
         pen.setWidth(9)
-        pen.setColor(QColor("lightgrey"))
+        pen.setColor(QColor(240, 84, 94))
         painter.setPen(pen)
         painter.drawArc(5.1, 5.1, self.width() - 10, self.height() - 10, 1450, -5650)
         # painter.drawEllipse(0,0,100,100)
         painter.setBrush(QColor("lightblue"))
         pen = QPen()
         pen.setWidth(10)
-        pen.setColor(QColor(240, 84, 94))
+        pen.setColor(QColor(255, 255, 255))
         painter.setPen(pen)
         painter.drawArc(5.1, 5.1, self.width() - 10, self.height() - 10, 1450, self.values)
         self.update()
@@ -85,28 +85,29 @@ class RestDialog(QDialog):
 
     def to(self):
         self.a += 1
+        self.total_secs-=1
         self.pr.setValue(self.a)
 
-        min = self.a // MIN_SECS
-        secs = self.a - min * MIN_SECS
+        min = self.total_secs // MIN_SECS
+        secs = self.total_secs - min * MIN_SECS
 
         self.pr.label.setText(
             u"<center>" + _("REST") + u"<br>" + u"{}:{}".format(str(min).zfill(2), str(secs).zfill(2)) + u"</center>"
         )
 
-        if self.a == self.total_secs:
+        if self.total_secs<=0:
             self.timer.stop()
             self.accept()
 
     def start(self, secs):
-        self.timer.start()
         self.total_secs = secs
+        self.a = 0
         self.pr.setRange(0, self.total_secs)
+        self.timer.start()
 
     # noinspection PyMethodOverriding
     def exec_(self, tomato_min):
         self.start(UserConfig.REST_MINUTES.get(str(tomato_min)+"MIN", 5) * MIN_SECS)
-        play(REST_START)
         return super(RestDialog, self).exec_()
 
     def reject(self):

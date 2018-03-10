@@ -85,12 +85,10 @@
     /*border: 2px solid grey;*/
     text-align: center;
     border-radius: 3px;
-
     /*width: 5px;*/
 }
 
 #rest_progress::chunk {
-    background-color: #f0545e;
     width: 20px;
 }
 
