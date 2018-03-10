@@ -14,7 +14,7 @@ from aqt.reviewer import Reviewer
 from aqt.utils import askUser
 from .config import UserConfig
 from .lang import _ as _2
-from ..lib.sounds import ABORT
+from ..lib.sounds import ABORT, HALF_TIME, TIMEOUT
 
 
 class anki_overview(Overview):
@@ -106,6 +106,10 @@ class anki_reviewer(Reviewer):
                     _2("ABORT TOMATO"), mw
             ):
                 mw.toolbar._linkHandler("decks")
+        elif url == "half_time":
+            play(HALF_TIME)
+        elif url == 'timeout':
+            play(TIMEOUT)
         else:
             super(anki_reviewer, self)._linkHandler(url)
 
@@ -155,27 +159,30 @@ class anki_reviewer(Reviewer):
             </table>
             <script>
             var time = %(time)d;
-            var maxTime = 0;
+            var maxTime = -1;
             $(function () {
             $("#ansbut").focus();
             updateTime();
-            setInterval(function () { time += 1; updateTime() }, 1000);
+            setInterval(function () { time+=1;maxTime -= 1; updateTime() }, 1000);
             });
 
             var updateTime = function () {
-                if (!maxTime) {
-                    $("#time").text("");
+                if (maxTime<0) {
                     return;
                 }
-                time = Math.min(maxTime, time);
-                var m = Math.floor(time / 60);
-                var s = time %% 60;
+                // maxTime = Math.max(maxTime, time);
+                var m = Math.floor(maxTime / 60);
+                var s = maxTime %% 60;
                 if (s < 10) {
                     s = "0" + s;
                 }
                 var e = $("#time");
-                if (maxTime == time) {
+                if (time==maxTime){
+                    py.link('half_time')
+                }
+                if (!maxTime) {
                     e.html("<font color=red>" + m + ":" + s + "</font>");
+                    py.link('timeout')
                 } else {
                     e.text(m + ":" + s);
                 }
