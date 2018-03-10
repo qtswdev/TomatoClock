@@ -180,10 +180,11 @@ class UserConfig:
         __store_location__ = _MetaConfigObj.StoreLocation.MediaFolder
         __config_file__ = "tmtclock.json"
 
-    TIME_LIMIT_SECONDS = 60
-    REST_MINUTES = {
+    Answer_Timeout_Seconds = 30
+    Break_Minutes = {
         "10MIN": 2,
         "15MIN": 3,
         "20MIN": 4,
         "25MIN": 5
     }
+    Show_Answer_On_Card_Timeout = True

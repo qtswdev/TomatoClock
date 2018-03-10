@@ -58,7 +58,7 @@ class OneClockAddon:
 
     def on_profile_loaded(self):
         ProfileConfig.donate_alerted = False
-        UserConfig.REST_MINUTES # just ensure json file is generated
+        UserConfig.Break_Minutes # just ensure json file is generated
 
     def on_review_cleanup(self):
         mw.setWindowIcon(QIcon(":/icons/anki.png"))

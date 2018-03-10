@@ -4,7 +4,7 @@
 from anki.lang import currentLang
 
 HAS_SET_UP = False
-MIN_SECS = 60
+MIN_SECS = 3
 __version__ = "0.1.3"
 
 REST_MINS = 5

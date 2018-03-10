@@ -107,7 +107,7 @@ class RestDialog(QDialog):
 
     # noinspection PyMethodOverriding
     def exec_(self, tomato_min):
-        self.start(UserConfig.REST_MINUTES.get(str(tomato_min)+"MIN", 5) * MIN_SECS)
+        self.start(UserConfig.Break_Minutes.get(str(tomato_min) + "MIN", 5) * MIN_SECS)
         return super(RestDialog, self).exec_()
 
     def reject(self):

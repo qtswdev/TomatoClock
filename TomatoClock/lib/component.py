@@ -39,7 +39,7 @@ class anki_overview(Overview):
         super(anki_overview, self)._linkHandler(url)
 
     def show_update_logs(self):
-        if  ProfileConfig.ttc_current_version != self.addon_version:
+        if ProfileConfig.ttc_current_version != self.addon_version:
             for logs in self.update_logs:
                 cur_log_ver, cur_update_msg = logs
                 if cur_log_ver != self.addon_version:
@@ -105,7 +105,7 @@ class anki_reviewer(Reviewer):
             middle = "<table cellpadding=0><tr><td class=stat2 align=center>%s</td></tr></table>" % middle
 
             self.bottom.web.eval("showQuestion(%s,%d);" % (
-                json.dumps(middle), UserConfig.TIME_LIMIT_SECONDS))
+                json.dumps(middle), UserConfig.Answer_Timeout_Seconds))
         else:
             super(anki_reviewer, self)._showAnswerButton()
 
@@ -128,6 +128,8 @@ class anki_reviewer(Reviewer):
             play(HALF_TIME)
         elif url == 'timeout':
             play(TIMEOUT)
+            if UserConfig.Show_Answer_On_Card_Timeout:
+                self._showAnswer()
         else:
             super(anki_reviewer, self)._linkHandler(url)
 
