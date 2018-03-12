@@ -25,7 +25,7 @@ except AttributeError:
 class Ui_TomatoClockDlg(object):
     def setupUi(self, TomatoClockDlg):
         TomatoClockDlg.setObjectName(_fromUtf8("TomatoClockDlg"))
-        TomatoClockDlg.resize(315, 461)
+        TomatoClockDlg.resize(315, 404)
         TomatoClockDlg.setStyleSheet(_fromUtf8("/*region OneClock*/\n"
 "#OneClockWidget {\n"
 "    font-family: \'Microsoft YaHei UI\', serif;\n"
