@@ -12,7 +12,7 @@ REST_MINS = 5
 
 UPDATE_LOGS = (
     (
-        "0.1.3", u"""
+        "0.1.4", u"""
         <ol>
             <li>新增： 静音选项，详细见设置 > PlaySounds</li>
             <li>新增： 插件投票选项（窗口右上角） </li>
