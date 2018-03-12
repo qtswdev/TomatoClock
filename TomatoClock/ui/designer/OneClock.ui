@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>315</width>
+    <width>345</width>
     <height>461</height>
    </rect>
   </property>
@@ -15,9 +15,20 @@
   </property>
   <property name="styleSheet">
    <string notr="true">/*region OneClock*/
-#OneClockWidget {
-    font-family: 'Microsoft YaHei UI', serif;
+#TomatoClockDlg {
+    font-family: 'Microsoft YaHei UI', Consolas, serif;
+}
+
+#frame {
+    /*border: 1px solid red;*/
+    border-radius: 10px;
     background-color: #3A4055;
+}
+
+#label_remark {
+    font-size: 10pt;
+    color: white;
+    font-weight: bold;
 }
 
 #btn_clock {
@@ -39,6 +50,10 @@
     border-bottom: 1px solid white;
     border-top: 1px solid white;
     border-right: 1px solid white;
+}
+#btn_quick {
+    border-bottom: 1px solid white;
+    border-top: 1px solid white;
 }
 
 #btn_start {
@@ -75,16 +90,129 @@
 
 /*region Progress Bar*/
 #clock_progress {
-    /*border: 2px solid grey;*/
-    text-align:center;
+    text-align: center;
     border-radius: 3px;
-
-    /*width: 5px;*/
+    background-color: #f0545e;
+    margin: 0;
 }
 
 #clock_progress::chunk {
-    background-color: #f0545e;
+    background-color: #ffffff;
     width: 20px;
+}
+
+#rest_progress {
+    /*border: 2px solid grey;*/
+    text-align: center;
+    border-radius: 3px;
+    /*width: 5px;*/
+}
+
+#rest_progress::chunk {
+    width: 20px;
+}
+
+#rest_progress QLabel {
+    border-image: url(&quot;:/icon/tomato.png&quot;);
+    font-family: 'Microsoft YaHei UI', serif;
+    color: white;
+    font-weight: bold;
+    font-size: 15pt;
+}
+
+#btn_ignore_rest {
+    background-color: #3A4055;
+    border-radius: 10px;
+    font-size: 10pt;
+    color: white;
+}
+
+#btn_ignore_rest:hover {
+    border: 1px solid white;
+    background-color: #f0545e;
+    font-weight: bold;
+}
+
+#btn_setting {
+    border-radius: 8px;
+}
+
+#btn_setting:hover {
+    border: 1px solid white;
+}
+
+#btn_donate {
+    border-radius: 8px;
+}
+
+#btn_wechat {
+    border-radius: 8px;
+}
+
+#btn_donate:hover {
+    border: 1px solid white;
+}
+
+#btn_wechat:hover {
+    border: 1px solid white;
+}
+
+#btn_more_addon {
+    border-radius: 8px;
+}
+
+#btn_more_addon:hover {
+    border: 1px solid white;
+}
+
+#btn_vote {
+     border-radius: 8px;
+}
+
+#btn_vote:hover {
+    border: 1px solid white;
+}
+
+#btn_updater {
+    border-radius: 10px;
+    background-color: #717da6;
+}
+
+#btn_updater:hover {
+    border: 1px solid white;
+}
+
+QPushButton::menu-indicator {
+    width: 0;
+}
+
+#more_addon_menu {
+    background-color: #f0545e; /* sets background of the menu */
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+}
+
+#more_addon_menu::item {
+    background-color: transparent;
+}
+
+#more_addon_menu::item:selected {
+    background-color: #f0313c;
+}
+
+#more_addon_menu &gt; QMenu {
+    background-color: #f0545e;
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+}
+
+#more_addon_menu &gt; QMenu::item {
+    background-color: transparent;
+}
+
+#more_addon_menu &gt; QMenu::item:selected {
 }
 
 /*endregion*/</string>
@@ -164,7 +292,7 @@
              <number>0</number>
             </property>
             <property name="sizeConstraint">
-             <enum>QLayout::SetFixedSize</enum>
+             <enum>QLayout::SetDefaultConstraint</enum>
             </property>
             <item>
              <widget class="QPushButton" name="btn_clock">
@@ -202,6 +330,51 @@
               </property>
               <property name="checked">
                <bool>true</bool>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_quick">
+              <property name="minimumSize">
+               <size>
+                <width>71</width>
+                <height>71</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>71</width>
+                <height>71</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true"/>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resource.qrc">
+                <normaloff>:/icon/miaobiao_off.png</normaloff>
+                <normalon>:/icon/miaobiao_on.png</normalon>:/icon/miaobiao_off.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>48</width>
+                <height>48</height>
+               </size>
+              </property>
+              <property name="checkable">
+               <bool>true</bool>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
               </property>
               <property name="autoDefault">
                <bool>false</bool>

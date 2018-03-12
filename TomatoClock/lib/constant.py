@@ -5,7 +5,7 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-MIN_SECS = 3
+MIN_SECS = 60
 __version__ = "0.1.4"
 
 REST_MINS = 5

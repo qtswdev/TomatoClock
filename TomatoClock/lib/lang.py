@@ -45,9 +45,11 @@ trans = {
     '25 MINUTES': {'zh_CN': u"25分钟", 'en': u'25 Minutes'},
     'SUPPORT DEVELOPMENT': {'zh_CN': u"掏出手机请框框喝咖啡吧！", 'en': u'Donate for Development'},
     'FOCUS MODE REMARK': {'zh_CN': _style + u"<center>专注模式</center>",
-                          'en': _style + u'<center>Simplified Layouts</center>'},
+                          'en': _style + u'<center>Tomato Mode</center>'},
     'NORMAL MODE REMARK': {'zh_CN': _style + u"<center>普通模式</center>",
-                           'en': _style + u'<center>Normal Layouts</center>'},
+                           'en': _style + u'<center>Normal Mode</center>'},
+    'QUICK MODE REMARK': {'zh_CN': _style + u"<center>训练模式</center>",
+                          'en': _style + u'<center>Training Mode</center>'},
 }
 
 
