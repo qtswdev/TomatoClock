@@ -1,5 +1,7 @@
 <RCC>
   <qresource prefix="icon">
+    <file>miaobiao_off.png</file>
+    <file>miaobiao_on.png</file>
     <file>vote.png</file>
     <file>wechat.png</file>
     <file>simple_off.png</file>

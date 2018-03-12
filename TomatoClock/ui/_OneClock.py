@@ -25,11 +25,22 @@ except AttributeError:
 class Ui_TomatoClockDlg(object):
     def setupUi(self, TomatoClockDlg):
         TomatoClockDlg.setObjectName(_fromUtf8("TomatoClockDlg"))
-        TomatoClockDlg.resize(315, 404)
+        TomatoClockDlg.resize(345, 461)
         TomatoClockDlg.setStyleSheet(_fromUtf8("/*region OneClock*/\n"
-"#OneClockWidget {\n"
-"    font-family: \'Microsoft YaHei UI\', serif;\n"
+"#TomatoClockDlg {\n"
+"    font-family: \'Microsoft YaHei UI\', Consolas, serif;\n"
+"}\n"
+"\n"
+"#frame {\n"
+"    /*border: 1px solid red;*/\n"
+"    border-radius: 10px;\n"
 "    background-color: #3A4055;\n"
+"}\n"
+"\n"
+"#label_remark {\n"
+"    font-size: 10pt;\n"
+"    color: white;\n"
+"    font-weight: bold;\n"
 "}\n"
 "\n"
 "#btn_clock {\n"
@@ -51,6 +62,10 @@ class Ui_TomatoClockDlg(object):
 "    border-bottom: 1px solid white;\n"
 "    border-top: 1px solid white;\n"
 "    border-right: 1px solid white;\n"
+"}\n"
+"#btn_quick {\n"
+"    border-bottom: 1px solid white;\n"
+"    border-top: 1px solid white;\n"
 "}\n"
 "\n"
 "#btn_start {\n"
@@ -87,16 +102,129 @@ class Ui_TomatoClockDlg(object):
 "\n"
 "/*region Progress Bar*/\n"
 "#clock_progress {\n"
-"    /*border: 2px solid grey;*/\n"
-"    text-align:center;\n"
+"    text-align: center;\n"
 "    border-radius: 3px;\n"
-"\n"
-"    /*width: 5px;*/\n"
+"    background-color: #f0545e;\n"
+"    margin: 0;\n"
 "}\n"
 "\n"
 "#clock_progress::chunk {\n"
-"    background-color: #f0545e;\n"
+"    background-color: #ffffff;\n"
 "    width: 20px;\n"
+"}\n"
+"\n"
+"#rest_progress {\n"
+"    /*border: 2px solid grey;*/\n"
+"    text-align: center;\n"
+"    border-radius: 3px;\n"
+"    /*width: 5px;*/\n"
+"}\n"
+"\n"
+"#rest_progress::chunk {\n"
+"    width: 20px;\n"
+"}\n"
+"\n"
+"#rest_progress QLabel {\n"
+"    border-image: url(\":/icon/tomato.png\");\n"
+"    font-family: \'Microsoft YaHei UI\', serif;\n"
+"    color: white;\n"
+"    font-weight: bold;\n"
+"    font-size: 15pt;\n"
+"}\n"
+"\n"
+"#btn_ignore_rest {\n"
+"    background-color: #3A4055;\n"
+"    border-radius: 10px;\n"
+"    font-size: 10pt;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"#btn_ignore_rest:hover {\n"
+"    border: 1px solid white;\n"
+"    background-color: #f0545e;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"#btn_setting {\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#btn_setting:hover {\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"#btn_donate {\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#btn_wechat {\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#btn_donate:hover {\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"#btn_wechat:hover {\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"#btn_more_addon {\n"
+"    border-radius: 8px;\n"
+"}\n"
+"\n"
+"#btn_more_addon:hover {\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"#btn_vote {\n"
+"     border-radius: 8px;\n"
+"}\n"
+"\n"
+"#btn_vote:hover {\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"#btn_updater {\n"
+"    border-radius: 10px;\n"
+"    background-color: #717da6;\n"
+"}\n"
+"\n"
+"#btn_updater:hover {\n"
+"    border: 1px solid white;\n"
+"}\n"
+"\n"
+"QPushButton::menu-indicator {\n"
+"    width: 0;\n"
+"}\n"
+"\n"
+"#more_addon_menu {\n"
+"    background-color: #f0545e; /* sets background of the menu */\n"
+"    border: 1px solid white;\n"
+"    border-radius: 3px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"#more_addon_menu::item {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"#more_addon_menu::item:selected {\n"
+"    background-color: #f0313c;\n"
+"}\n"
+"\n"
+"#more_addon_menu > QMenu {\n"
+"    background-color: #f0545e;\n"
+"    border: 1px solid white;\n"
+"    border-radius: 3px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"#more_addon_menu > QMenu::item {\n"
+"    background-color: transparent;\n"
+"}\n"
+"\n"
+"#more_addon_menu > QMenu::item:selected {\n"
 "}\n"
 "\n"
 "/*endregion*/"))
@@ -127,7 +255,7 @@ class Ui_TomatoClockDlg(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
         self.horizontalLayout.setSpacing(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.btn_clock = QtGui.QPushButton(self.frame)
@@ -146,15 +274,31 @@ class Ui_TomatoClockDlg(object):
         self.btn_clock.setFlat(True)
         self.btn_clock.setObjectName(_fromUtf8("btn_clock"))
         self.horizontalLayout.addWidget(self.btn_clock)
+        self.btn_quick = QtGui.QPushButton(self.frame)
+        self.btn_quick.setMinimumSize(QtCore.QSize(71, 71))
+        self.btn_quick.setMaximumSize(QtCore.QSize(71, 71))
+        self.btn_quick.setStyleSheet(_fromUtf8(""))
+        self.btn_quick.setText(_fromUtf8(""))
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/miaobiao_off.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/miaobiao_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btn_quick.setIcon(icon1)
+        self.btn_quick.setIconSize(QtCore.QSize(48, 48))
+        self.btn_quick.setCheckable(True)
+        self.btn_quick.setChecked(False)
+        self.btn_quick.setAutoDefault(False)
+        self.btn_quick.setFlat(True)
+        self.btn_quick.setObjectName(_fromUtf8("btn_quick"))
+        self.horizontalLayout.addWidget(self.btn_quick)
         self.btn_comp = QtGui.QPushButton(self.frame)
         self.btn_comp.setMinimumSize(QtCore.QSize(71, 71))
         self.btn_comp.setMaximumSize(QtCore.QSize(71, 71))
         self.btn_comp.setStyleSheet(_fromUtf8(""))
         self.btn_comp.setText(_fromUtf8(""))
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/simple_off.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        icon1.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/simple_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
-        self.btn_comp.setIcon(icon1)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/simple_off.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/simple_on.png")), QtGui.QIcon.Normal, QtGui.QIcon.On)
+        self.btn_comp.setIcon(icon2)
         self.btn_comp.setIconSize(QtCore.QSize(48, 48))
         self.btn_comp.setCheckable(True)
         self.btn_comp.setChecked(False)
@@ -224,9 +368,9 @@ class Ui_TomatoClockDlg(object):
         font.setFamily(_fromUtf8("Microsoft YaHei UI,serif"))
         font.setPointSize(10)
         self.btn_start.setFont(font)
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/tomato.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_start.setIcon(icon2)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/tomato.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_start.setIcon(icon3)
         self.btn_start.setIconSize(QtCore.QSize(36, 36))
         self.btn_start.setObjectName(_fromUtf8("btn_start"))
         self.horizontalLayout_3.addWidget(self.btn_start)

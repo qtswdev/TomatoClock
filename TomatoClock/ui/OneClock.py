@@ -27,6 +27,8 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
 
         self.btn_clock.toggled.connect(partial(self.on_mode_toggled, 0))
         self.btn_comp.toggled.connect(partial(self.on_mode_toggled, 1))
+        self.btn_quick.toggled.connect(partial(self.on_mode_toggled, 2))
+        self.btn_quick.setVisible(False)
 
         self.btn_clock.toggle()
         self.btn_clock.toggle()
@@ -40,14 +42,18 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         if not val:
             self.btn_clock.setChecked(True)
             self.btn_comp.setChecked(False)
-
+            self.btn_quick.setChecked(False)
             self.label_remark.setText(_("FOCUS MODE REMARK"))
-        else:
+        elif val == 1:
             self.btn_clock.setChecked(False)
             self.btn_comp.setChecked(True)
-
+            self.btn_quick.setChecked(False)
             self.label_remark.setText(_("NORMAL MODE REMARK"))
-
+        elif val == 2:
+            self.btn_clock.setChecked(False)
+            self.btn_comp.setChecked(False)
+            self.btn_quick.setChecked(True)
+            self.label_remark.setText(_("QUICK MODE REMARK"))
         self._mode = val
 
     @property
@@ -117,13 +123,13 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         # set default item
         self._min_items[2].setSelected(True)
 
-    def on_mode_toggled(self, toggled, mode):
-        if not toggled:
-            mode = 1 if not mode else 0
-        self.mode = mode
+    def on_mode_toggled(self, mode, toggled):
+        if toggled:
+            self.mode = mode
 
     def exec_(self):
         if not self.updater.isRunning():
             self.updater.start()
-        if UserConfig.PlaySounds["start"]:play(START)
+        if UserConfig.PlaySounds["start"]:
+            play(START)
         return super(OneClock, self).exec_()
