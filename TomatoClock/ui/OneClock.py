@@ -11,10 +11,10 @@ from aqt import mw
 from .DonateWidget20 import DialogDonate
 from ._OneClock import Ui_TomatoClockDlg
 from ..lib.config import UserConfig
-from ..lib.constant import __version__
+from ..lib.constant import __version__, ADDON_CD
 from ..lib.lang import _
-from ..lib.sounds import PAGE
-from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor
+from ..lib.sounds import START
+from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor, VoteButton
 
 
 class OneClock(QDialog, Ui_TomatoClockDlg):
@@ -85,7 +85,7 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         self.updater = AddonUpdater(
             self,
             _("TOMATO COLOCK"),
-            1608644302,
+            ADDON_CD,
             "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/constant.py",
             "",
             mw.pm.addonFolder(),
@@ -93,6 +93,8 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         )
         self.verticalLayout_3.insertWidget(1, WeChatButton(self))
         self.verticalLayout_3.insertWidget(2, MoreAddonButton(self))
+        self.verticalLayout_4.insertWidget(0, VoteButton(self, ADDON_CD))
+
         self.verticalLayout_4.insertWidget(0, UpgradeButton(self, self.updater))
 
     def _adjust_dialog(self):
@@ -123,5 +125,5 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
     def exec_(self):
         if not self.updater.isRunning():
             self.updater.start()
-        play(PAGE)
+        if UserConfig.PlaySounds["start"]:play(START)
         return super(OneClock, self).exec_()

@@ -58,7 +58,7 @@ class OneClockAddon:
 
     def on_profile_loaded(self):
         ProfileConfig.donate_alerted = False
-        UserConfig.Break_Minutes # just ensure json file is generated
+        UserConfig.Break_Minutes  # just ensure json file is generated
 
     def on_review_cleanup(self):
         mw.setWindowIcon(QIcon(":/icons/anki.png"))
@@ -98,7 +98,7 @@ class OneClockAddon:
             self._set_style_sheet(self.dlg_rest)
             self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
             self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
-        play(BREAK)
+        if UserConfig.PlaySounds["break"]: play(BREAK)
         self.dlg_rest.exec_(self.dlg.min)
 
     @staticmethod

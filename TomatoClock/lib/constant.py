@@ -3,9 +3,10 @@
 # Project : TomatoClock
 from anki.lang import currentLang
 
+ADDON_CD = 1608644302
 HAS_SET_UP = False
 MIN_SECS = 3
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 REST_MINS = 5
 
@@ -13,15 +14,15 @@ UPDATE_LOGS = (
     (
         "0.1.3", u"""
         <ol>
-            <li>新增： 设置窗口，现在可以自定义卡片倒计时和休息时间了。</li>
-            <li>新增： 若干音效 </li>
-            <li>修复： 第一张卡片发音一直重复的问题</li>
+            <li>新增： 静音选项，详细见设置 > PlaySounds</li>
+            <li>新增： 插件投票选项（窗口右上角） </li>
+            <li>修复： 若干BUG</li>
             </ol>
-        """ if currentLang =='zh_CN' else """
+        """ if currentLang == 'zh_CN' else """
         <ol>
-            <li>Added: Setting dialog, you can now change the minutes of card count down seconds and the rest/break minutes </li>
-            <li>Added: Sounds effects </li>
-            <li>Fixed: Lopping sound of cards on the first shown of question</li>
+            <li>Added: Mute for sounds, see in settings > PlaySounds </li>
+            <li>Added: "Vote for Addon" button, at the top right corner of window </li>
+            <li>Fixed: several bugs</li>
             </ol>"""
     ),
 )

@@ -188,3 +188,11 @@ class UserConfig:
         "25MIN": 5
     }
     Show_Answer_On_Card_Timeout = True
+
+    PlaySounds = {
+        "abort": True,
+        "break": True,
+        "half_way_limit": True,
+        "start": True,
+        "timeout": True,
+    }

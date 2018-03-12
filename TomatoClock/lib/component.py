@@ -119,15 +119,17 @@ class anki_reviewer(Reviewer):
 
     def _linkHandler(self, url):
         if url == "decks":
-            play(ABORT)
+            if UserConfig.PlaySounds["abort"]:
+                play(ABORT)
             if askUser(
                     _2("ABORT TOMATO"), mw
             ):
                 mw.toolbar._linkHandler("decks")
         elif url == "half_time":
-            play(HALF_TIME)
+            if UserConfig.PlaySounds["half_way_limit"]:
+                play(HALF_TIME)
         elif url == 'timeout':
-            play(TIMEOUT)
+            if UserConfig.PlaySounds["timeout"]:play(TIMEOUT)
             if UserConfig.Show_Answer_On_Card_Timeout:
                 self._showAnswer()
         else:

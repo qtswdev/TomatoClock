@@ -145,6 +145,14 @@
     border: 1px solid white;
 }
 
+#btn_vote {
+     border-radius: 8px;
+}
+
+#btn_vote:hover {
+    border: 1px solid white;
+}
+
 #btn_updater {
     border-radius: 10px;
     background-color: #717da6;

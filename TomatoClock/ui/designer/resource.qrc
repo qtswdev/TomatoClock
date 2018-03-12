@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file>vote.png</file>
     <file>wechat.png</file>
     <file>simple_off.png</file>
     <file>simple_on.png</file>

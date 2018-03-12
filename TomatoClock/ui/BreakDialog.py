@@ -4,14 +4,12 @@ from PyQt4.QtCore import QTimer, QSize, Qt
 from PyQt4.QtGui import QProgressBar, QLabel, QFont, QVBoxLayout, QPainter, QPen, QColor, QDialog, QPushButton, QIcon, \
     QPixmap
 
-from anki.sound import play,clearAudioQueue
 from aqt import mw
 from aqt.utils import askUser
 from .DonateWidget20 import DialogDonate
 from ..lib.config import ProfileConfig, UserConfig
 from ..lib.constant import MIN_SECS
 from ..lib.lang import _
-from ..lib.sounds import REST_START
 
 
 class RoundProgress(QProgressBar):

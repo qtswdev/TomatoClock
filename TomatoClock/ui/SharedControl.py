@@ -42,6 +42,8 @@ trans = {
     'CONFIGURATION': {'zh_CN': u'设置', 'en': u'Configuration'},
     'WECHART CHANNEL WELCOME': {'zh_CN': _style + u'<center>微信扫一扫关注“Anki干货铺”！QQ群：723233740</center>',
                                 'en': _style + u'<center>Subscribe Anki365</center>'},
+    'VOTE ADDON': {'zh_CN':  u'给插件投票！',
+                   'en':  u'Vote Add-On!'},
 }
 
 
@@ -334,6 +336,19 @@ class WeChatButton(_ImageButton):
         self.parent().hide()
         dlg.exec_()
         self.parent().show()
+
+
+class VoteButton(_ImageButton):
+
+    def __init__(self, parent, addon_cd):
+        super(VoteButton, self).__init__(parent, ":/icon/vote.png")
+        self.addon_cd = addon_cd
+        self.clicked.connect(self.on_clicked)
+        self.setObjectName("btn_vote")
+        self.setToolTip(_(u"VOTE ADDON"))
+
+    def on_clicked(self):
+        openLink("https://ankiweb.net/shared/review/%s" % self.addon_cd)
 
 
 # AddonUpdater(
