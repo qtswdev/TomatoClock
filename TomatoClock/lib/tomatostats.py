@@ -3,6 +3,25 @@
 # Project : TomatoClock
 import json
 
+trans = {
+    'TOMATO COLOCK': {'zh_CN': u'番茄时钟', 'en': u'Tomato Clock'}
+}
+
+
+def _(key):
+    from anki.lang import currentLang
+    lang = currentLang
+    key = key.upper().strip()
+    if lang != 'zh_CN' and lang != 'en' and lang != 'fr':
+        lang = 'en'  # fallback
+
+    def disp(s):
+        return s.lower().capitalize()
+
+    if key not in trans or lang not in trans[key]:
+        return disp(key)
+    return trans[key][lang]
+
 
 class TomatoStats:
     def __init__(self, db, debug=False):
@@ -12,135 +31,110 @@ class TomatoStats:
         self.db = db
 
     def reports(self):
-        return self._js_ref + self._chart_tomato_hour() + self._chart_tomato_count()
+        html = """
+        %s
+        <table>
+            <tr width=100%%>
+                    <td width=300px height=300px id=tomato_count></td>
+                    <td width=300px height=300px id=tomato_hour></td>
+            </tr>
+        </table>
+        %s
+        """
+        return html % (self._js_ref, u"""
+        <script>
+        {}
+        </script>
+        """.format(u"".join(
+            [
+                self._chart_tomato_hour(),
+                self._chart_tomato_count()
+            ]
+        )))
 
     @property
     def _js_ref(self):
-        return """
-            <script src="https://code.highcharts.com/highcharts.js"></script>
-            <script src="https://code.highcharts.com/highcharts-more.js"></script>
-            <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
-            """
+        return u"""
+        <script src="http://echarts.baidu.com/examples/vendors/echarts/echarts.min.js"></script>
+        """
 
-    def _chart_tomato_count(self):
+    def _graph(self, id, conf):
+        id = unicode(id, encoding="utf-8")
+        html = u"""
+        echarts.init(document.getElementById('%(id)s')).setOption(%(conf)s);
+        """ % dict(id=id, conf=json.dumps(conf).replace("\"", ""))
+        return html
+
+    def _chart_tomato_count(self, ):
         _list_data = self.db.stat_tomato_count(-7)
         if not _list_data:
             return ''
-        txt = u"""
-            <div id="over_view"></div>
-              <script>
-              Highcharts.chart('over_view', {
-                chart: {
-                    zoomType: 'xy'
-                },
-                title: {
-                    text: ''
-                },
-                subtitle: {
-                    text: ''
-                },
-                xAxis: [{
-                    categories: %s,
-                    crosshair: true
-                }],
-                yAxis: [{ // Primary yAxis
-                    labels: {
-                        format: '{value}',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-                    title: {
-                        text: 'Tomato Count',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    }
-                }, { // Secondary yAxis
-                    title: {
-                        text: 'Minutes',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    },
-                    labels: {
-                        format: '{value}',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    },
-                    opposite: true
-                }],
-                tooltip: {
-                    shared: true
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'left',
-                    x: 120,
-                    verticalAlign: 'top',
-                    y: 100,
-                    floating: true,
-                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                },
-                series: [
-                {
-                    name: 'Minutes',
-                    type: 'column',
-                    yAxis: 1,
-                    data: %s,
-                    tooltip: {
-                        valueSuffix: ' min'
-                    }
-
-                }, {
-                    name: 'Tomato',
-                    type: 'spline',
-                    data: %s,
-                    tooltip: {
-                        valueSuffix: ''
-                    }
-                }]
-            });
-            </script>
-        """ % (
-            str([i[0] for i in _list_data]),
-            str([i[1] for i in _list_data]),
-            str([i[2] for i in _list_data]),
+        conf = dict(
+            tooltip=dict(
+                trigger="'item'",
+            ),
+            legend={"data": u"'Tomato Count'"},
+            xAxis=
+            dict(data=["'%s'" % i[0] for i in _list_data]),
+            yAxis={},
+            series=[
+                dict(
+                    name=u"'Tomato Count'",
+                    label=dict(normal=dict(
+                        show=False,
+                        position="'center'"),
+                        emphasis=dict(show=True,
+                                      textStyle=dict(
+                                          fontSize="'30'",
+                                          fontWeight="'bold'"))
+                    ),
+                    type=u"'bar'",
+                    data=[i[2] for i in _list_data]
+                )
+            ]
         )
-        return txt
+        # str([i[0] for i in _list_data]),
+        # str([i[1] for i in _list_data]),
+        # str([i[2] for i in _list_data]),
 
-    def _chart_tomato_hour(self):
+        return self._graph("tomato_count", conf)
+
+    def _chart_tomato_hour(self, ):
         _list_data = self.db.stat_tomato_hour(-7)
+
         if not _list_data:
             return ''
-        txt = """
-                <div id="tomato_hour"></div>
-                <script>
-                Highcharts.chart('tomato_hour', {
 
-                title: {
-                    text: 'Tomato Hour'
-                },
+        conf = dict(
+            tooltip=dict(
+                trigger="'item'",
+            ),
 
-                xAxis: {
-                    categories: %s
-                },
-
-                series: [
-                {
-                    name: 'Minutes studied',
-                    type: 'pie',
-                    allowPointSelect: true,
-                    keys: ['name', 'y', 'selected', 'sliced'],
-                    data: %s,
-                    showInLegend: true
-                }
-                ]
-            });
-            </script>
-            """ % (
-            str([i[0] for i in _list_data]),
-            json.dumps(_list_data)
+            series=[
+                dict(
+                    name="'Minutes Studied'",
+                    type="'pie'",
+                    roseType="'area'",
+                    center=["'60%'", "'40%'"],
+                    radius=[30, 110],
+                    avoidLabelOverlap=False,
+                    label=dict(normal=dict(
+                        show=False,
+                        position="'center'"),
+                        emphasis=dict(show=True,
+                                      textStyle=dict(
+                                          fontSize="'30'",
+                                          fontWeight="'bold'"))
+                    ),
+                    labelLine=dict(
+                        normal=dict(
+                            show=False
+                        )
+                    ),
+                    data=[
+                        dict(value=row[1], name="'%s'" % int(row[0])) for row in _list_data
+                    ]
+                )
+            ]
         )
-        return txt
+        return self._graph("tomato_hour", conf)

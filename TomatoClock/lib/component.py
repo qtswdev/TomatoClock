@@ -33,13 +33,7 @@ class anki_overview(Overview):
         self.db = db
 
     def reports(self):
-        return """<br>
-                    <table width=80%% >
-                        <tr>
-                            <td align=center valign=top> %s</td>
-                        </tr>
-                    </table>
-                    """ % self.db.statics.reports() if UserConfig.Show_Reports else ""
+        return self.db.statics.reports() if UserConfig.Show_Reports else ""
 
     def _linkHandler(self, url):
         # if url == 'show_tomato_chart':
@@ -100,7 +94,7 @@ class anki_overview(Overview):
                             $("#tomato_chart").innerHTML = txt;
                         }
                     </script>
-                    <div id=tomato_chart>
+                    <div id=tomato_chart width=600px height=600px align=center valign=top>
                         %s
                     </div>
                     ''' % (
