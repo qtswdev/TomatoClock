@@ -133,6 +133,7 @@ class anki_reviewer(Reviewer):
         super(anki_reviewer, self)._showAnswer()
         if not self.mode:
             self.bottom.web.eval("stopTimer(%s);" % 0)
+        self.db.answer_shown()
 
     def _linkHandler(self, url):
         if url == "decks":
