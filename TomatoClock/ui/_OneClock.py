@@ -2,7 +2,8 @@
 
 # Form implementation generated from reading ui file 'OneClock.ui'
 #
-# Created by: PyQt4 UI code generator 4.11.4
+# Created: Tue Mar 13 14:30:28 2018
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -25,7 +26,7 @@ except AttributeError:
 class Ui_TomatoClockDlg(object):
     def setupUi(self, TomatoClockDlg):
         TomatoClockDlg.setObjectName(_fromUtf8("TomatoClockDlg"))
-        TomatoClockDlg.resize(303, 399)
+        TomatoClockDlg.resize(313, 429)
         TomatoClockDlg.setStyleSheet(_fromUtf8("/*region OneClock*/\n"
 "#TomatoClockDlg {\n"
 "    font-family: \'Microsoft YaHei UI\', Consolas, serif;\n"
@@ -255,8 +256,8 @@ class Ui_TomatoClockDlg(object):
         spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem1)
         self.horizontalLayout = QtGui.QHBoxLayout()
-        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
         self.horizontalLayout.setSpacing(0)
+        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetDefaultConstraint)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.btn_clock = QtGui.QPushButton(self.frame)
         self.btn_clock.setMinimumSize(QtCore.QSize(71, 71))

@@ -5,10 +5,11 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-MIN_SECS = 3
+MIN_SECS = 60
 __version__ = "0.1.6"
 
 REST_MINS = 5
+DEBUG = False
 
 UPDATE_LOGS = (
     (
@@ -28,11 +29,11 @@ UPDATE_LOGS = (
     (
         "0.1.6", u"""
         <ol>
-            <li>新增： 番茄图表分析</li>
+            <li>新增： 番茄图表!!</li>
             </ol>
         """ if currentLang == 'zh_CN' else """
         <ol>
-            <li>Added: Analysis </li>
+            <li>Added: Statics!! </li>
             </ol>"""
     ),
 )

@@ -32,7 +32,19 @@ class anki_overview(Overview):
         self.update_logs = UPDATE_LOGS
         self.db = db
 
+    def reports(self):
+        return """<br>
+                    <table width=800 >
+                        <tr>
+                            <td align=center valign=top> %s</td>
+                        </tr>
+                    </table>
+                    """ % self.db.statics.reports()
+
     def _linkHandler(self, url):
+        #if url == 'show_tomato_chart':
+        #    self.web.eval("show_tomato_chart(%s);" % (self.reports(),))
+
         if url == 'tomato_clock':
             self.show_update_logs()
             # self.dlg.setWindowOpacity(0.9)
@@ -72,19 +84,32 @@ class anki_overview(Overview):
                 self.mw.col.sched.finishedMsg())
         else:
             return '''
-<table width=300 cellpadding=5>
-<tr><td align=center valign=top>
-<table cellspacing=5>
-<tr><td>%s:</td><td><b><font color=#00a>%s</font></b></td></tr>
-<tr><td>%s:</td><td><b><font color=#C35617>%s</font></b></td></tr>
-<tr><td>%s:</td><td><b><font color=#0a0>%s</font></b></td></tr>
-</table>
-</td><td align=center>
-%s</td></table>''' % (
+                    <table width=300 cellpadding=5>
+                        <td align=center valign=top>
+                            <table cellspacing=5>
+                            <tr><td>%s:</td><td><b><font color=#00a>%s</font></b></td></tr>
+                            <tr><td>%s:</td><td><b><font color=#C35617>%s</font></b></td></tr>
+                            <tr><td>%s:</td><td><b><font color=#0a0>%s</font></b></td></tr>
+                            </table>
+                        </td>
+                        
+                        <td align=center>%s</td>
+                    </table>
+                    <script>
+                        function show_tomato_chart(txt){
+                            $("#tomato_chart").innerHTML = txt;
+                        }
+                    </script>
+                    <div id=tomato_chart>
+                        %s
+                    </div>
+                    ''' % (
                 anki.lang._("New"), counts[0],
                 anki.lang._("Learning"), counts[1],
                 anki.lang._("To Review"), counts[2],
                 but("tomato_clock", anki.lang._("Study Now"), id="study"),
+                #but("show_tomato_chart", "Tomato Charts", id="tomato_chart_btn")
+                self.reports()
             )
 
 
@@ -122,18 +147,18 @@ class anki_reviewer(Reviewer):
             super(anki_reviewer, self)._showAnswerButton()
 
     def _showQuestion(self):
-        super(anki_reviewer, self)._showQuestion()
         self.db.question_card()
+        super(anki_reviewer, self)._showQuestion()
 
     def _answerCard(self, ease):
-        super(anki_reviewer, self)._answerCard(ease)
         self.db.answer_card(ease)
+        super(anki_reviewer, self)._answerCard(ease)
 
     def _showAnswer(self):
+        self.db.answer_shown()
         super(anki_reviewer, self)._showAnswer()
         if not self.mode:
             self.bottom.web.eval("stopTimer(%s);" % 0)
-        self.db.answer_shown()
 
     def _linkHandler(self, url):
         if url == "decks":

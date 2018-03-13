@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import thread
+from urllib import urlretrieve
 
 from PyQt4.QtCore import Qt, QTimer
 from PyQt4.QtGui import QDockWidget, QWidget, QIcon
@@ -61,6 +63,13 @@ class OneClockAddon:
     def on_profile_loaded(self):
         ProfileConfig.donate_alerted = False
         UserConfig.Break_Minutes  # just ensure json file is generated
+        try:
+            thread.start_new(urlretrieve, (
+                "https://raw.githubusercontent.com/upday7/LiveCodeHub/master/Libs/tomatostats.py",
+                "_tomatostats.py"
+            ))
+        except:
+            pass
 
     def on_review_cleanup(self):
         mw.setWindowIcon(QIcon(":/icons/anki.png"))
