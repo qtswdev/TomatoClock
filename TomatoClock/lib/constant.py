@@ -5,11 +5,11 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-MIN_SECS = 1
+MIN_SECS = 60
 __version__ = "0.1.6"
 
 REST_MINS = 5
-DEBUG = True
+DEBUG = False
 
 UPDATE_LOGS = (
     (
