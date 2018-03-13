@@ -1,19 +1,25 @@
+import atexit
+
+from anki.cards import Card
+from anki.db import DB
+from aqt import mw
 
 CREATION_SQL = """
-CREATE TABLE tomato_session
+create table if not exists tomato_session
 (
   id                INTEGER  NOT NULL
     PRIMARY KEY
   AUTOINCREMENT,
   deck              INT      NOT NULL,
-  tomato_target     INT      NOT NULL,
+  target_secs     INT      NOT NULL,
   tomato_dt         DATE     NOT NULL,
   started           DATETIME NOT NULL,
-  ended             DATETIME NOT NULL,
-  answer_limit_secs INT
+  ended             DATETIME ,
+  answer_limit_secs INT,
+  _mode INT
 );
 
-CREATE TABLE session_detail
+create table if not exists tomato_session_item
 (
   id            INTEGER NOT NULL
     PRIMARY KEY
@@ -25,6 +31,80 @@ CREATE TABLE session_detail
       ON DELETE CASCADE,
   item_started  DATETIME,
   item_answered DATETIME,
-  answer_btn    INT
+  answer_btn    INT,
+  card_id    INT,
+  note_id    INT
 );
 """
+
+
+class TomatoDB(DB):
+    def __init__(self, db_path):
+        super(TomatoDB, self).__init__(db_path, str)
+
+        # call start functions
+        list(map(
+            lambda _: getattr(self, _)(),
+            [func for func in dir(self) if func.startswith("_start_")]
+        ))
+
+        # register close
+        atexit.register(self.close)
+
+    def _start_ensure_tables(self):
+        self.executescript(CREATION_SQL)
+
+    @property
+    def session_id(self):
+        return self.scalar("select seq from sqlite_sequence "
+                           "where name=?", 'tomato_session')
+
+    @property
+    def card(self):
+        """
+
+        :rtype: Card
+        """
+        return mw.reviewer.card
+
+    def execute(self, sql, *a, **ka):
+        cur = super(TomatoDB, self).execute(sql, *a, **ka)
+        self.commit()
+        return cur
+
+    def start_session(self, target_min, limit_secs, mode):
+        self.execute(
+            """
+            INSERT INTO tomato_session(
+            deck,target_secs,tomato_dt,started,ended,answer_limit_secs,_mode
+            ) values (?,?,current_date,current_time,null ,?,?)
+            """, self.card.did, target_min, limit_secs, mode
+        )
+
+    def question_card(self):
+        self.execute(
+            """
+            INSERT INTO tomato_session_item(session_id, 
+            item_started, 
+            item_answered, 
+            answer_btn, 
+            card_id, 
+            note_id) 
+            VALUES(?,CURRENT_TIME,NULL,NULL,?,?)
+            """, self.session_id, self.card.id, self.card.nid
+        )
+
+    def answer_card(self, ease):
+        self.execute(
+            """
+            UPDATE tomato_session_item set item_answered = current_time ,answer_btn = ?
+            where session_id= ? and card_id = ?
+            """, ease, self.session_id, self.card.id
+        )
+
+    def end_session(self):
+        self.execute(
+            """
+            UPDATE tomato_session set ended = current_time where id = ?
+            """, self.session_id
+        )

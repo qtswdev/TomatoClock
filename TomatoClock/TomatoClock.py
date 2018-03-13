@@ -11,6 +11,7 @@ from aqt.main import AnkiQt
 from .lib.component import anki_overview, anki_reviewer
 from .lib.config import ProfileConfig, UserConfig
 from .lib.constant import MIN_SECS
+from .lib.db import TomatoDB
 from .lib.sounds import BREAK
 from .ui.BreakDialog import RestDialog
 from .ui.OneClock import OneClock
@@ -35,14 +36,15 @@ class OneClockAddon:
         self.dlg_rest = None
         self.pb_w = None
 
+        self.db = TomatoDB("_TomatoClock.db")
         self.replace_mw_overview()
         self.replace_mw_reviewer()
 
     def replace_mw_overview(self):
-        mw.overview = anki_overview(self.dlg)
+        mw.overview = anki_overview(self.dlg, self.db)
 
     def replace_mw_reviewer(self):
-        mw.reviewer = anki_reviewer(self.dlg.mode)
+        mw.reviewer = anki_reviewer(self.dlg.mode, self.db)
 
     @staticmethod
     def _set_style_sheet(obj):
@@ -75,6 +77,7 @@ class OneClockAddon:
 
     def on_btn_start_clicked(self):
         self.replace_mw_reviewer()
+
         mw.setWindowIcon(QIcon(":/icon/tomato.png"))
         assert isinstance(mw, AnkiQt)
 
@@ -93,12 +96,14 @@ class OneClockAddon:
         self.pb_w.hide()
         self.pb.reset()
         mw.moveToState("overview")
+        self.db.end_session()
         if not self.dlg_rest:
             self.dlg_rest = RestDialog(mw)
             self._set_style_sheet(self.dlg_rest)
             self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
             self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
-        if UserConfig.PlaySounds["break"]: play(BREAK)
+        if UserConfig.PlaySounds["break"]:
+            play(BREAK)
         self.dlg_rest.exec_(self.dlg.min)
 
     @staticmethod
@@ -112,6 +117,7 @@ class OneClockAddon:
         if self.pb:
             self.pb_w.show()
             self.pb.on_timer()
+        self.db.commit()
 
     def setup_progressbar(self):
 

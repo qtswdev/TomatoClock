@@ -16,16 +16,21 @@ from aqt.reviewer import Reviewer
 from aqt.utils import askUser
 from .config import UserConfig, ProfileConfig
 from .lang import _ as _2
+from ..lib.db import TomatoDB
 from ..lib.lang import _ as trans, currentLang
 from ..lib.sounds import ABORT, HALF_TIME, TIMEOUT
+from ..ui.OneClock import OneClock
 
 
 class anki_overview(Overview):
-    def __init__(self, tomato_dlg):
+    def __init__(self, tomato_dlg, db):
+        assert isinstance(db, TomatoDB)
+        assert isinstance(tomato_dlg, OneClock)
         super(anki_overview, self).__init__(mw)
         self.dlg = tomato_dlg
         self.addon_version = __version__
         self.update_logs = UPDATE_LOGS
+        self.db = db
 
     def _linkHandler(self, url):
         if url == 'tomato_clock':
@@ -35,6 +40,11 @@ class anki_overview(Overview):
             accepted = self.dlg.exec_()
 
             if accepted:
+                self.db.start_session(
+                    self.dlg.min,
+                    UserConfig.Answer_Timeout_Seconds,
+                    self.dlg.mode
+                )
                 url = "study"
         super(anki_overview, self)._linkHandler(url)
 
@@ -80,9 +90,11 @@ class anki_overview(Overview):
 
 class anki_reviewer(Reviewer):
 
-    def __init__(self, mode):
+    def __init__(self, mode, db):
+        assert isinstance(db, TomatoDB)
         super(anki_reviewer, self).__init__(mw)
         self.mode = mode
+        self.db = db
 
     def restore_layouts(self):
         mw.menuBar().show()
@@ -109,8 +121,13 @@ class anki_reviewer(Reviewer):
         else:
             super(anki_reviewer, self)._showAnswerButton()
 
+    def _showQuestion(self):
+        super(anki_reviewer, self)._showQuestion()
+        self.db.question_card()
+
     def _answerCard(self, ease):
         super(anki_reviewer, self)._answerCard(ease)
+        self.db.answer_card(ease)
 
     def _showAnswer(self):
         super(anki_reviewer, self)._showAnswer()
@@ -125,11 +142,12 @@ class anki_reviewer(Reviewer):
                     _2("ABORT TOMATO"), mw
             ):
                 mw.toolbar._linkHandler("decks")
+                self.db.end_session()
         elif url == "half_time":
             if UserConfig.PlaySounds["half_way_limit"]:
                 play(HALF_TIME)
         elif url == 'timeout':
-            if UserConfig.PlaySounds["timeout"]:play(TIMEOUT)
+            if UserConfig.PlaySounds["timeout"]: play(TIMEOUT)
             if UserConfig.Show_Answer_On_Card_Timeout:
                 self._showAnswer()
         else:
