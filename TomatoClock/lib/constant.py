@@ -29,11 +29,11 @@ UPDATE_LOGS = (
     (
         "0.1.6", u"""
         <ol>
-            <li>新增： 番茄图表!!</li>
+            <li>新增： 番茄图表! (在设置中可以关闭)</li>
             </ol>
         """ if currentLang == 'zh_CN' else """
         <ol>
-            <li>Added: Statics!! </li>
+            <li>Added: Statics! (Switch off in settings) </li>
             </ol>"""
     ),
 )

@@ -180,6 +180,7 @@ class UserConfig:
         __store_location__ = _MetaConfigObj.StoreLocation.MediaFolder
         __config_file__ = "tmtclock.json"
 
+    Show_Reports = True
     Answer_Timeout_Seconds = 30
     Break_Minutes = {
         "10MIN": 2,

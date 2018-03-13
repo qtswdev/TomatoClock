@@ -39,10 +39,10 @@ class anki_overview(Overview):
                             <td align=center valign=top> %s</td>
                         </tr>
                     </table>
-                    """ % self.db.statics.reports()
+                    """ % self.db.statics.reports() if UserConfig.Show_Reports else ""
 
     def _linkHandler(self, url):
-        #if url == 'show_tomato_chart':
+        # if url == 'show_tomato_chart':
         #    self.web.eval("show_tomato_chart(%s);" % (self.reports(),))
 
         if url == 'tomato_clock':
@@ -108,7 +108,7 @@ class anki_overview(Overview):
                 anki.lang._("Learning"), counts[1],
                 anki.lang._("To Review"), counts[2],
                 but("tomato_clock", anki.lang._("Study Now"), id="study"),
-                #but("show_tomato_chart", "Tomato Charts", id="tomato_chart_btn")
+                # but("show_tomato_chart", "Tomato Charts", id="tomato_chart_btn")
                 self.reports()
             )
 
