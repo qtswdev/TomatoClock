@@ -24,6 +24,8 @@ class TomatoStats:
 
     def _chart_tomato_count(self):
         _list_data = self.db.stat_tomato_count(-7)
+        if not _list_data:
+            return ''
         txt = u"""
             <div id="over_view"></div>
               <script>
@@ -90,7 +92,7 @@ class TomatoStats:
                     tooltip: {
                         valueSuffix: ' min'
                     }
-            
+
                 }, {
                     name: 'Tomato',
                     type: 'spline',
@@ -110,20 +112,21 @@ class TomatoStats:
 
     def _chart_tomato_hour(self):
         _list_data = self.db.stat_tomato_hour(-7)
-
+        if not _list_data:
+            return ''
         txt = """
                 <div id="tomato_hour"></div>
                 <script>
                 Highcharts.chart('tomato_hour', {
-        
+
                 title: {
                     text: 'Tomato Hour'
                 },
-            
+
                 xAxis: {
                     categories: %s
                 },
-            
+
                 series: [
                 {
                     name: 'Minutes studied',
