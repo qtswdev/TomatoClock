@@ -34,7 +34,7 @@ class anki_overview(Overview):
 
     def reports(self):
         return """<br>
-                    <table width=800 >
+                    <table width=80%% >
                         <tr>
                             <td align=center valign=top> %s</td>
                         </tr>

@@ -1,8 +1,8 @@
 import atexit
-
 import datetime
 
 from anki.cards import Card
+from anki.decks import  DeckManager
 from anki.db import DB
 from aqt import mw
 from ..lib.constant import MIN_SECS, DEBUG
@@ -115,6 +115,14 @@ class TomatoDB(DB):
         :rtype: Card
         """
         return mw.reviewer.card
+
+    @property
+    def deck(self):
+        """
+
+        :rtype:
+        """
+        return mw.col.decks.current()
 
     @property
     def now(self):
@@ -240,9 +248,11 @@ class TomatoDB(DB):
                   round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)
                   >= ts.target_secs
                   and ts.tomato_dt >= ?
+                  and ts.deck = ?
             group by ts.tomato_dt
             """, (datetime.datetime.now() +
-                  datetime.timedelta(days=recent_days)).strftime('%Y-%m-%d'), ).fetchall()
+                  datetime.timedelta(days=recent_days)).strftime('%Y-%m-%d'),
+            self.deck['id']).fetchall()
 
     def stat_tomato_hour(self, recent_days):
         """
@@ -261,6 +271,8 @@ class TomatoDB(DB):
                   round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)
                   >= ts.target_secs
                   and ts.tomato_dt >= ?
+                  and ts.deck = ?
             group by strftime('%H',ts.started)
             """, (datetime.datetime.now() +
-                  datetime.timedelta(days=recent_days)).strftime('%Y-%m-%d'), ).fetchall()
+                  datetime.timedelta(days=recent_days)).strftime('%Y-%m-%d'),
+            self.deck['id']).fetchall()
