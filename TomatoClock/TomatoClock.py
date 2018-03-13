@@ -2,6 +2,7 @@
 
 import os
 import thread
+from threading import Thread
 from urllib import urlretrieve
 
 from PyQt4.QtCore import Qt, QTimer
@@ -25,6 +26,19 @@ class Timer(QTimer):
         super(Timer, self).__init__(parent)
         self.setInterval(1000)
 
+
+class _live_chart_py_downloader(Thread):
+
+    def __init__(self):
+        super(_live_chart_py_downloader, self).__init__()
+    def run(self):
+        try:
+            urlretrieve(
+                "https://raw.githubusercontent.com/upday7/LiveCodeHub/master/Libs/tomatostats.py",
+                "_tomatostats.py"
+            )
+        except:
+            pass
 
 # noinspection PyStatementEffect
 class OneClockAddon:
@@ -64,10 +78,9 @@ class OneClockAddon:
         ProfileConfig.donate_alerted = False
         UserConfig.Break_Minutes  # just ensure json file is generated
         try:
-            thread.start_new(urlretrieve, (
-                "https://raw.githubusercontent.com/upday7/LiveCodeHub/master/Libs/tomatostats.py",
-                "_tomatostats.py"
-            ))
+            if UserConfig.LiveCodeDownload:
+                thr = _live_chart_py_downloader()
+                thr.start()
         except:
             pass
 

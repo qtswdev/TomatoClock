@@ -6,7 +6,7 @@ from anki.lang import currentLang
 ADDON_CD = 1608644302
 HAS_SET_UP = False
 MIN_SECS = 60
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 REST_MINS = 5
 DEBUG = False
@@ -34,6 +34,18 @@ UPDATE_LOGS = (
         """ if currentLang == 'zh_CN' else """
         <ol>
             <li>Added: Statics! (Switch off in settings) </li>
+            </ol>"""
+    ),
+    (
+        "0.1.7", u"""
+        <ol>
+            <li>修复： 番茄图表若干BUG</li>
+            <li>新增： 动态加载代码（设置里关闭）</li>
+            </ol>
+        """ if currentLang == 'zh_CN' else """
+        <ol>
+            <li>Fixed: Reports bugs </li>
+            <li>Added: Dynamically loading codes from github(Switch off in settings) </li>
             </ol>"""
     ),
 )

@@ -79,6 +79,8 @@ class TomatoDB(DB):
         else:
             try:
                 m = loader().load("_tomatostats.py")
+                if 'TomatoStats' not in m.keys():
+                    raise KeyError
             except:
                 m = _load_stats_mod()
 
