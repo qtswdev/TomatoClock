@@ -60,8 +60,10 @@ class TomatoStats:
         ]
         if any(reports_js):
             days = [7, 14, 30, 60, 180] if not self.user_config else self.user_config.report_recent_days
-            selected = 0 if not self._recent_days else days.index(self._recent_days)
             html = u"""
+            <style>
+            * {font-family: 'Microsoft YaHei UI', Consolas, serif;}
+            </style>
             %s
             <table width=95%% align=center>
                 <tr>
@@ -95,7 +97,7 @@ class TomatoStats:
                                      [u'<option value=%(days)s '
                                       u'%(selected)s>%(days)s</option>' % dict(days=i,
                                                                                selected="selected='selected'"
-                                                                               if i == selected else '')
+                                                                               if i == self._recent_days else '')
                                       for i in
                                       days]
                                  ),
