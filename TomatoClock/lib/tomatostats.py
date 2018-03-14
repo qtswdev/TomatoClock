@@ -46,32 +46,36 @@ class TomatoStats:
         self._data_by_dates = []
 
     def reports(self):
-        html = """
-        %s
-        <table width=95%% align=center>
-            <tr>
-                <td width=300px height=300px id=tomato_cnt align=center></td>
-                <td width=300px height=300px id=cards_per_tomato_cnt align=center></td>
-            </tr>
-            <tr >
-                <td width=300px height=300px id=study_minute align=center></td>
-                <td width=600px height=300px id=tomato_hour align=center></td>
-            </tr>
-        </table>
-        %s
-        """
-        return html % (self._js_ref, u"""
-        <script>
-        {}
-        </script>
-        """.format(u"".join(
-            [
-                self._chart_tomato_cnt(),
-                self._chart_tomato_hour(),
-                self._chart_study_minute(),
-                self._chart_cards_per_tomato_cnt()
-            ]
-        )))
+
+        reports_js = [
+            self._chart_tomato_cnt(),
+            self._chart_tomato_hour(),
+            self._chart_study_minute(),
+            self._chart_cards_per_tomato_cnt()
+        ]
+        if any(reports_js):
+            html = """
+            %s
+            <table width=95%% align=center>
+                <tr>
+                    <td width=300px height=300px id=tomato_cnt align=center></td>
+                    <td width=300px height=300px id=cards_per_tomato_cnt align=center></td>
+                </tr>
+                <tr >
+                    <td width=300px height=300px id=study_minute align=center></td>
+                    <td width=600px height=300px id=tomato_hour align=center></td>
+                </tr>
+            </table>
+            %s
+            """
+            return html % (self._js_ref, u"""
+            <script>
+            {}
+            </script>
+            """.format(u"".join(
+                reports_js
+            )))
+        return ''
 
     @property
     def _js_ref(self):
@@ -133,7 +137,7 @@ class TomatoStats:
          y_tomato_min, y_tomato_target_min, y_cards_count
          ) = self.data_by_dates
         if not x_dt_labels:
-            return
+            return ''
 
         conf = dict(
             tooltip=dict(
@@ -160,7 +164,7 @@ class TomatoStats:
          y_tomato_min, y_tomato_target_min, y_cards_count
          ) = self.data_by_dates
         if not x_dt_labels:
-            return
+            return ''
 
         conf = dict(
             tooltip=dict(
@@ -188,7 +192,7 @@ class TomatoStats:
          ) = self.data_by_dates
 
         if not x_dt_labels:
-            return
+            return ''
 
         y_cards_per_tomato = [round(a / b, 2) for a, b in zip(y_cards_count, y_tomato_count)]
 
