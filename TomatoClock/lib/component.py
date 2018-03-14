@@ -78,25 +78,25 @@ class anki_overview(Overview):
                 self.mw.col.sched.finishedMsg())
         else:
             return '''
-                    <table width=300 cellpadding=5>
-                        <td align=center valign=top>
-                            <table cellspacing=5>
-                            <tr><td>%s:</td><td><b><font color=#00a>%s</font></b></td></tr>
-                            <tr><td>%s:</td><td><b><font color=#C35617>%s</font></b></td></tr>
-                            <tr><td>%s:</td><td><b><font color=#0a0>%s</font></b></td></tr>
-                            </table>
-                        </td>
+                    <table width=300 cellpadding=5 valign=top>
+                        <tr>
+                            <td align=center valign=top>
+                                <table cellspacing=5>
+                                    <tr><td>%s:</td><td><b><font color=#00a>%s</font></b></td></tr>
+                                    <tr><td>%s:</td><td><b><font color=#C35617>%s</font></b></td></tr>
+                                    <tr><td>%s:</td><td><b><font color=#0a0>%s</font></b></td></tr>
+                                </table>
+                            </td>
+                            
+                            <td align=center>%s</td>
+                        </tr>
                         
-                        <td align=center>%s</td>
                     </table>
-                    <script>
-                        function show_tomato_chart(txt){
-                            $("#tomato_chart").innerHTML = txt;
-                        }
-                    </script>
-                    <div id=tomato_chart width=600px height=600px align=center valign=top>
-                        %s
-                    </div>
+                        
+                    <table id=tomato_chart  align=center valign=center>
+                        <td colspan=5>%s</td>
+                    </table>
+                        
                     ''' % (
                 anki.lang._("New"), counts[0],
                 anki.lang._("Learning"), counts[1],
