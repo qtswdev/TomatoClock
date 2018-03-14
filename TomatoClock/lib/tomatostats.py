@@ -3,9 +3,17 @@
 # Project : TomatoClock
 import datetime
 import json
+from operator import itemgetter
 
 trans = {
-    'TOMATO COLOCK': {'zh_CN': u'番茄时钟', 'en': u'Tomato Clock'}
+    'TOMATO COLOCK': {'zh_CN': u'番茄时钟', 'en': u'Tomato Clock'},
+    "'Minutes Studied'": {'zh_CN': u"'学习分钟数'", 'en': u"'Minutes Studied'"},
+    "'Best Focus Hour'": {'zh_CN': u"'最佳学习时间'", 'en': u"'Best Focus Hour'"},
+    "'Count of Tomatoes and Minutes'": {'zh_CN': u"'番茄和学习分钟'",
+                                        'en': u"'Count of Tomatoes and Minutes'"},
+    "'Tomato Count'": {'zh_CN': u"'番茄个数'", 'en': u"'Tomato Count'"},
+    "'{a} <br/>{b} Clock: {c} ({d}%)'": {'zh_CN': u"'{a} <br/>{b} 点: {c} ({d}%)'",
+                                         'en': u"'{a} <br/>{b} Clock: {c} ({d}%)'"},
 }
 
 
@@ -19,6 +27,9 @@ def _(key):
     def disp(s):
         return s.lower().capitalize()
 
+    for k, v in trans.items():
+        trans[k.upper()] = v
+
     if key not in trans or lang not in trans[key]:
         return disp(key)
     return trans[key][lang]
@@ -26,7 +37,8 @@ def _(key):
 
 class TomatoStats:
     def __init__(self, db, debug=False):
-        if debug:
+        self.debug = debug
+        if self.debug:
             from .db import TomatoDB
             assert isinstance(db, TomatoDB)
         self.db = db
@@ -96,7 +108,7 @@ class TomatoStats:
             ),
             title={
                 # "text": "'Count of Tomatoes and Minutes'",
-                "subtext": "'Count of Tomatoes and Minutes'"
+                "subtext": _("'Count of Tomatoes and Minutes'")
             },
             # legend={"data": [u"'Tomato Count'", u"'Minutes Studied'"]},
             xAxis=
@@ -105,7 +117,7 @@ class TomatoStats:
             series=[
                 dict(
 
-                    name=u"'Tomato Count'",
+                    name=_("'Tomato Count'"),
                     label=dict(normal=dict(
                         show=False,
                         position="'center'"),
@@ -118,7 +130,7 @@ class TomatoStats:
                     data=[i[2] for i in _list_data]  # cound of tomato
                 )
                 , dict(
-                    name=u"'Minutes Studied'",
+                    name=_("'Minutes Studied'"),
                     label=dict(normal=dict(
                         show=False,
                         position="'center'"),
@@ -157,17 +169,41 @@ class TomatoStats:
         if not _list_data:
             return ''
 
+        if self.debug:
+            _list_data = [
+                [0, 33.1],
+                [1, 22],
+                [2, 14],
+                [3, 0.5],
+                [4, 22.7],
+                [5, 19],
+                [6, 43],
+                [7, 59],
+                [8, 20],
+                [9, 11],
+                [10, 0.9],
+                [11, 0.9],
+                [12, 0.9],
+                [13, 0.9],
+                [14, 0.9],
+                [25, 0.9],
+                [16, 0.9],
+                [17, 0.9]
+            ]
+        _list_data = sorted(_list_data, key=itemgetter(1), reverse=True)[:6]
+
         conf = dict(
             tooltip=dict(
                 trigger="'item'",
+                formatter=_("'{a} <br/>{b} Clock: {c} ({d}%)'")
             ),
             title={
                 # "text": "'Count of Tomatoes and Minutes'",
-                "subtext": "'Best Focus Hour'"
+                "subtext": _("'Best Focus Hour'")
             },
             series=[
                 dict(
-                    name="'Minutes Studied'",
+                    name=_("'Minutes Studied'"),
                     type="'pie'",
                     roseType="'area'",
                     # center=["'45%'", "'45%'"],

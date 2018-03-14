@@ -12,7 +12,7 @@ from aqt import mw
 from aqt.main import AnkiQt
 from .lib.component import anki_overview, anki_reviewer
 from .lib.config import ProfileConfig, UserConfig
-from .lib.constant import MIN_SECS
+from .lib.constant import MIN_SECS, STATISTICS_PY
 from .lib.db import TomatoDB
 from .lib.sounds import BREAK
 from .ui.BreakDialog import RestDialog
@@ -34,7 +34,7 @@ class _live_chart_py_downloader(Thread):
     def run(self):
         try:
             urlretrieve(
-                "https://raw.githubusercontent.com/upday7/LiveCodeHub/master/Libs/tomatostats.py",
+                STATISTICS_PY,
                 "_tomatostats.py"
             )
         except:
