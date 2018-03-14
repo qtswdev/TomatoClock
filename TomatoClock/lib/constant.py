@@ -5,9 +5,9 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-DEBUG = True
+DEBUG = False
 MIN_SECS = 1 if DEBUG else 60
-__version__ = "0.1.7"
+__version__ = "0.2.0"
 STATISTICS_PY = "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/tomatostats.py"
 REST_MINS = 5
 
@@ -48,4 +48,14 @@ UPDATE_LOGS = (
             <li>Added: Dynamically loading codes from github(Switch off in settings) </li>
             </ol>"""
     ),
+    (
+        "0.2.0", u"""
+        <ol>
+            <li>新增： 图表时间范围（设置里调节： report_recent_days）</li>
+            </ol>
+        """ if currentLang == 'zh_CN' else """
+        <ol>
+            <li>Added: Days range for statistics (Switch off in settings: report_recent_days) </li>
+            </ol>"""
+    )
 )
