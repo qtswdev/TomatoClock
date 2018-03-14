@@ -230,7 +230,10 @@ class TomatoStats:
         if not x_dt_labels:
             return ''
 
-        y_cards_per_tomato = [round(a / b, 2) for a, b in zip(y_cards_count, y_tomato_count)]
+        try:
+            y_cards_per_tomato = [round(a / b, 2) for a, b in zip(y_cards_count, y_tomato_count)]
+        except ZeroDivisionError:
+            y_cards_per_tomato = 0
 
         conf = dict(
             tooltip=dict(
