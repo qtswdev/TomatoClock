@@ -86,11 +86,10 @@ class TomatoStats:
         _list_data = self.db.execute(
             """
             SELECT
-              strftime('%m/%d',ts.tomato_dt)                 TOMATO_DT,
-              round(sum(ts.target_secs) / 60.0, 2)            MINS,
-              count(ts.id) COUNT
+              strftime('%m/%d', ts.tomato_dt)                                                                   TOMATO_DT,
+              sum(round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)) /60.0                     MINS,
+              round(sum((strftime('%s', ts.ended) - strftime('%s', ts.started)) / round(ts.target_secs, 2)), 2) COUNT
             FROM tomato_session ts
-            
             WHERE ended IS NOT NULL AND
                   round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)
                   >= ts.target_secs
@@ -111,42 +110,31 @@ class TomatoStats:
                 "subtext": _("'Count of Tomatoes and Minutes'")
             },
             # legend={"data": [u"'Tomato Count'", u"'Minutes Studied'"]},
-            xAxis=
-            dict(data=["'%s'" % i[0] for i in _list_data]),
-            yAxis={},
+            xAxis=dict(data=["'%s'" % i[0] for i in _list_data]),
+            yAxis=[
+                dict(type="'value'",
+                    # name=_("'Tomato Count'"),
+                     position="'left'"),
+                dict(type="'value'",
+                    # name=_("'Minutes Studied'"),
+                     position="'right'")
+            ],
             series=[
                 dict(
-
                     name=_("'Tomato Count'"),
-                    label=dict(normal=dict(
-                        show=False,
-                        position="'center'"),
-                        emphasis=dict(show=True,
-                                      textStyle=dict(
-                                          fontSize="'30'",
-                                          fontWeight="'bold'"))
-                    ),
                     type=u"'bar'",
-                    data=[i[2] for i in _list_data]  # cound of tomato
+                    yAxisIndex=0,
+                    data=[i[2] for i in _list_data]  # count of tomato
                 )
-                , dict(
+                ,
+                dict(
                     name=_("'Minutes Studied'"),
-                    label=dict(normal=dict(
-                        show=False,
-                        position="'center'"),
-                        emphasis=dict(show=True,
-                                      textStyle=dict(
-                                          fontSize="'30'",
-                                          fontWeight="'bold'"))
-                    ),
-                    type=u"'bar'",
+                    type=u"'line'",
+                    yAxisIndex=1,
                     data=[i[1] for i in _list_data]  # minutes
                 )
             ]
         )
-        # str([i[0] for i in _list_data]),
-        # str([i[1] for i in _list_data]),
-        # str([i[2] for i in _list_data]),
 
         return self._graph("tomato_count", conf)
 

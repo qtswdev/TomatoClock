@@ -15,5 +15,7 @@ Anki 2.0 **ONLY**
 ![](https://raw.githubusercontent.com/upday7/TomatoClock/master/screenshots/mainwindow.png)
 ###### Break Timer
 ![](https://raw.githubusercontent.com/upday7/TomatoClock/master/screenshots/break_on_window.png)
+###### Charts
+![](https://raw.githubusercontent.com/upday7/TomatoClock/master/screenshots/charts_1.png)
 ###### Simplified Anki Layouts
 ![](https://raw.githubusercontent.com/upday7/TomatoClock/master/screenshots/simplified_layous.png)
