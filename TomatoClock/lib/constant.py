@@ -5,7 +5,7 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-DEBUG = True
+DEBUG = False
 MIN_SECS = 1 if DEBUG else 60
 __version__ = "0.1.7"
 
