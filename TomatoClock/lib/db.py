@@ -1,6 +1,7 @@
 import atexit
 import datetime
 
+from ..lib.config import UserConfig
 from anki.cards import Card
 from anki.db import DB
 from aqt import mw
@@ -84,7 +85,7 @@ class TomatoDB(DB):
             except:
                 m = _load_stats_mod()
 
-        return m['TomatoStats'](self, DEBUG)
+        return m['TomatoStats'](self, DEBUG,UserConfig)
 
     def _start_ensure_tables(self):
         self.executescript(CREATION_SQL)

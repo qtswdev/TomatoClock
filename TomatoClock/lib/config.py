@@ -180,6 +180,7 @@ class UserConfig:
         __store_location__ = _MetaConfigObj.StoreLocation.MediaFolder
         __config_file__ = "tmtclock.json"
 
+    report_recent_days = [3,7, 14, 30, 60, 180]
     LiveCodeDownload = True
     Show_Reports = True
     Answer_Timeout_Seconds = 30

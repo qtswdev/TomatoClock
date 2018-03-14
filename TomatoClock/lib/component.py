@@ -31,9 +31,10 @@ class anki_overview(Overview):
         self.addon_version = __version__
         self.update_logs = UPDATE_LOGS
         self.db = db
+        self.report_recent_days = None
 
     def reports(self):
-        return self.db.statics.reports() if UserConfig.Show_Reports else ""
+        return self.db.statics.reports(self.report_recent_days) if UserConfig.Show_Reports else ""
 
     def _linkHandler(self, url):
         # if url == 'show_tomato_chart':
@@ -52,6 +53,9 @@ class anki_overview(Overview):
                     self.dlg.mode
                 )
                 url = "study"
+        elif url.startswith("report_refresh"):
+            self.report_recent_days = int(url.replace("report_refresh", ""))
+            mw.overview.refresh()
         super(anki_overview, self)._linkHandler(url)
 
     def show_update_logs(self):

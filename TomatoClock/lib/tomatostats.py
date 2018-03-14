@@ -7,6 +7,8 @@ from operator import itemgetter
 
 trans = {
     'TOMATO COLOCK': {'zh_CN': u'番茄时钟', 'en': u'Tomato Clock'},
+    'report days part1': {'zh_CN': u'最近番茄时钟数据：', 'en': u'Recent Tomato Clock statistics：'},
+    'days': {'zh_CN': u'天', 'en': u'day(s)'},
     "'Minutes Studied'": {'zh_CN': u"'学习分钟数'", 'en': u"'Minutes Studied'"},
     "'Best Focus Hour'": {'zh_CN': u"'最佳学习时段'", 'en': u"'Best Focus Hour'"},
     "'Count of Tomatoes and Minutes'": {'zh_CN': u"'番茄和学习分钟'",
@@ -37,15 +39,18 @@ def _(key):
 
 
 class TomatoStats:
-    def __init__(self, db, debug=False):
+    def __init__(self, db, debug=False, user_config=None):
         self.debug = debug
+        self.user_config = user_config
         if self.debug:
             from .db import TomatoDB
             assert isinstance(db, TomatoDB)
         self.db = db
         self._data_by_dates = []
+        self._recent_days = None
 
-    def reports(self):
+    def reports(self, recent_days):
+        self._recent_days = recent_days
 
         reports_js = [
             self._chart_tomato_cnt(),
@@ -54,9 +59,18 @@ class TomatoStats:
             self._chart_cards_per_tomato_cnt()
         ]
         if any(reports_js):
-            html = """
+            days = [7, 14, 30, 60, 180] if not self.user_config else self.user_config.report_recent_days
+            selected = 0 if not self._recent_days else days.index(self._recent_days)
+            html = u"""
             %s
             <table width=95%% align=center>
+                <tr>
+                    <td align=left colspan=2> 
+                        <div>%s <select id=recent_days onchange="sel_Change()">
+                          %s
+                        </select> %s</div>
+                    </td>
+                </tr>
                 <tr>
                     <td width=300px height=300px id=tomato_cnt align=center></td>
                     <td width=300px height=300px id=cards_per_tomato_cnt align=center></td>
@@ -66,15 +80,35 @@ class TomatoStats:
                     <td width=600px height=300px id=tomato_hour align=center></td>
                 </tr>
             </table>
+            <script>
+            function sel_Change(){
+                var objS = document.getElementById("recent_days");
+                var days = objS.options[objS.selectedIndex].value;
+                py.link('report_refresh' + days)
+            }
+            </script>
             %s
             """
-            return html % (self._js_ref, u"""
-            <script>
-            {}
-            </script>
-            """.format(u"".join(
-                reports_js
-            )))
+            return_val = html % (self._js_ref,
+                                 _("report days part1"),
+                                 u"".join(
+                                     [u'<option value=%(days)s '
+                                      u'%(selected)s>%(days)s</option>' % dict(days=i,
+                                                                               selected="selected='selected'"
+                                                                               if i == selected else '')
+                                      for i in
+                                      days]
+                                 ),
+                                 _("days"),
+                                 u"""
+                                  <script>
+                                  {}
+                                  </script>
+                                  """.format(u"".join(reports_js))
+                                 )
+            # set default selection
+            # document.getElementById("sel")[2].selected = true;
+            return return_val
         return ''
 
     @property
@@ -215,16 +249,14 @@ class TomatoStats:
 
         return self._graph("cards_per_tomato_cnt", conf)
 
-    def _chart_tomato_hour(self, ):
+    def _chart_tomato_hour(self):
         _list_data = self.db.execute(
             """
             SELECT
               strftime('%H',ts.started)                 HOUR,
              round( sum(ts.target_secs) / 60.0,2) MINS
             FROM tomato_session ts
-            WHERE ended IS NOT NULL AND
-                  round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)
-                  >= ts.target_secs
+            WHERE ended IS NOT NULL 
                   AND ts.tomato_dt >= ?
                   AND ts.deck = ?
             GROUP BY strftime('%H',ts.started)
@@ -234,27 +266,6 @@ class TomatoStats:
         if not _list_data:
             return ''
 
-        if self.debug:
-            _list_data = [
-                [0, 33.1],
-                [1, 22],
-                [2, 14],
-                [3, 0.5],
-                [4, 22.7],
-                [5, 19],
-                [6, 43],
-                [7, 59],
-                [8, 20],
-                [9, 11],
-                [10, 0.9],
-                [11, 0.9],
-                [12, 0.9],
-                [13, 0.9],
-                [14, 0.9],
-                [25, 0.9],
-                [16, 0.9],
-                [17, 0.9]
-            ]
         _list_data = sorted(_list_data, key=itemgetter(0))
         time_slots = [
             '00:00 - 07:59',
@@ -277,7 +288,7 @@ class TomatoStats:
         for i, val in enumerate(_list_data):
             min = val[1]
             for slot_i, time_slot_rng in enumerate(time_slots_range):
-                if time_slot_rng[0] <= val[0] < time_slot_rng[1]:
+                if time_slot_rng[0] <= int(val[0]) < time_slot_rng[1]:
                     mins_stutied[slot_i] = mins_stutied[slot_i] + round(min, 2)
 
         conf = dict(
