@@ -135,20 +135,20 @@ class TomatoStats:
         if not self._data_by_dates:
             _list_data = self.db.execute(
                 """
-                select
+                SELECT
                   TOMATO_DT,
                   sum(TOMATO_MINS) TT_TOMATO_MINS,
                   sum(TARGET_MINS) TT_TGT_MINS,
                   sum(TOMATO_CNT)  TT_TOMATO_CNT,
                   sum(CARDS_CNT)   TT_CARDS_COUNT
-                from (SELECT
+                FROM (SELECT
                         strftime('%m/%d', ts.tomato_dt)                                                    TOMATO_DT,
                         (strftime('%s', ts.ended) - strftime('%s', ts.started)) / 60.0                     TOMATO_MINS,
                         ts.target_secs / 60.0                                                              TARGET_MINS,
                         (strftime('%s', ts.ended) - strftime('%s', ts.started)) / round(ts.target_secs, 1) TOMATO_CNT,
-                        (select count(*)
-                         from tomato_session_item tsi
-                         where ts.id = tsi.session_id)                                                     CARDS_CNT
+                        (SELECT count(*)
+                         FROM tomato_session_item tsi
+                         WHERE ts.id = tsi.session_id)                                                     CARDS_CNT
                       FROM tomato_session ts
                       WHERE ended IS NOT NULL 
                               AND date(ts.tomato_dt) >= ?
@@ -161,8 +161,8 @@ class TomatoStats:
 
             x_dt_labels = ["'%s'" % i[0] for i in _list_data]
             y_tomato_count = [round(i[3], 2) for i in _list_data]
-            y_tomato_min = [round(i[2], 2) for i in _list_data]
-            y_tomato_target_min = [round(i[1], 2) for i in _list_data]
+            y_tomato_min = [round(i[1], 2) for i in _list_data]
+            y_tomato_target_min = [round(i[2], 2) for i in _list_data]
             y_cards_count = [round(i[4], 2) for i in _list_data]
 
             self._data_by_dates = [x_dt_labels, y_tomato_count, y_tomato_min, y_tomato_target_min, y_cards_count]
@@ -265,7 +265,7 @@ class TomatoStats:
                   AND ts.tomato_dt >= ?
                   AND ts.deck = ?
             GROUP BY strftime('%H',ts.started)
-            order by strftime('%H',ts.started)
+            ORDER BY strftime('%H',ts.started)
             """, self.report_days, self.db.deck['id']).fetchall()
 
         if not _list_data:
