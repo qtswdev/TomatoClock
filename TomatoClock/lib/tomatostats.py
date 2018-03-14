@@ -259,7 +259,7 @@ class TomatoStats:
             """
             SELECT
               strftime('%H',ts.started)                 HOUR,
-             round( sum(ts.target_secs) / 60.0,2) MINS
+             round( sum((strftime('%s', ts.ended) - strftime('%s', ts.started)) / 60.0 ),2) MINS
             FROM tomato_session ts
             WHERE ended IS NOT NULL 
                   AND ts.tomato_dt >= ?
