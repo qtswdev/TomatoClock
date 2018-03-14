@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-import thread
 from threading import Thread
 from urllib import urlretrieve
 
@@ -31,6 +30,7 @@ class _live_chart_py_downloader(Thread):
 
     def __init__(self):
         super(_live_chart_py_downloader, self).__init__()
+
     def run(self):
         try:
             urlretrieve(
@@ -39,6 +39,7 @@ class _live_chart_py_downloader(Thread):
             )
         except:
             pass
+
 
 # noinspection PyStatementEffect
 class OneClockAddon:
@@ -118,6 +119,7 @@ class OneClockAddon:
         self.pb_w.hide()
         self.pb.reset()
         mw.moveToState("overview")
+        mw.overview.refresh()
         self.db.end_session()
         if not self.dlg_rest:
             self.dlg_rest = RestDialog(mw)

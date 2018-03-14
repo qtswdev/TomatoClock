@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Created: 3/13/2018
 # Project : TomatoClock
+import datetime
 import json
 
 trans = {
@@ -65,20 +66,45 @@ class TomatoStats:
         """ % dict(id=id, conf=json.dumps(conf).replace("\"", ""))
         return html
 
+    @property
+    def report_days(self):
+        return (datetime.datetime.now() + datetime.timedelta(days=-7)).date()
+
     def _chart_tomato_count(self, ):
-        _list_data = self.db.stat_tomato_count(-7)
+        _list_data = self.db.execute(
+            """
+            SELECT
+              strftime('%m/%d',ts.tomato_dt)                 TOMATO_DT,
+              round(sum(ts.target_secs) / 60.0, 2)            MINS,
+              count(ts.id) COUNT
+            FROM tomato_session ts
+            
+            WHERE ended IS NOT NULL AND
+                  round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)
+                  >= ts.target_secs
+                  AND date(ts.tomato_dt) >= ?
+                  AND ts.deck = ?
+            GROUP BY strftime('%m/%d',ts.tomato_dt)
+            """, self.report_days, self.db.deck['id']).fetchall()
+
         if not _list_data:
             return ''
+
         conf = dict(
             tooltip=dict(
                 trigger="'item'",
             ),
-            legend={"data": u"'Tomato Count'"},
+            title={
+                # "text": "'Count of Tomatoes and Minutes'",
+                "subtext": "'Count of Tomatoes and Minutes'"
+            },
+            # legend={"data": [u"'Tomato Count'", u"'Minutes Studied'"]},
             xAxis=
             dict(data=["'%s'" % i[0] for i in _list_data]),
             yAxis={},
             series=[
                 dict(
+
                     name=u"'Tomato Count'",
                     label=dict(normal=dict(
                         show=False,
@@ -89,7 +115,20 @@ class TomatoStats:
                                           fontWeight="'bold'"))
                     ),
                     type=u"'bar'",
-                    data=[i[2] for i in _list_data]
+                    data=[i[2] for i in _list_data]  # cound of tomato
+                )
+                , dict(
+                    name=u"'Minutes Studied'",
+                    label=dict(normal=dict(
+                        show=False,
+                        position="'center'"),
+                        emphasis=dict(show=True,
+                                      textStyle=dict(
+                                          fontSize="'30'",
+                                          fontWeight="'bold'"))
+                    ),
+                    type=u"'bar'",
+                    data=[i[1] for i in _list_data]  # minutes
                 )
             ]
         )
@@ -100,7 +139,20 @@ class TomatoStats:
         return self._graph("tomato_count", conf)
 
     def _chart_tomato_hour(self, ):
-        _list_data = self.db.stat_tomato_hour(-7)
+        _list_data = self.db.execute(
+            """
+            SELECT
+              strftime('%H',ts.started)                 HOUR,
+             round( sum(ts.target_secs) / 60.0,2) MINS
+            FROM tomato_session ts
+            WHERE ended IS NOT NULL AND
+                  round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2)
+                  >= ts.target_secs
+                  AND ts.tomato_dt >= ?
+                  AND ts.deck = ?
+            GROUP BY strftime('%H',ts.started)
+            order by strftime('%H',ts.started)
+            """, self.report_days, self.db.deck['id']).fetchall()
 
         if not _list_data:
             return ''
@@ -109,26 +161,31 @@ class TomatoStats:
             tooltip=dict(
                 trigger="'item'",
             ),
-
+            title={
+                # "text": "'Count of Tomatoes and Minutes'",
+                "subtext": "'Best Focus Hour'"
+            },
             series=[
                 dict(
                     name="'Minutes Studied'",
                     type="'pie'",
                     roseType="'area'",
-                    center=["'60%'", "'40%'"],
-                    radius=[30, 110],
-                    avoidLabelOverlap=False,
-                    label=dict(normal=dict(
-                        show=False,
-                        position="'center'"),
+                    # center=["'45%'", "'45%'"],
+                    radius=["'50%'", "'70%'"],
+                    avoidLabelOverlap=True,
+                    label=dict(
+                        # normal=dict(
+                        #     show=False,
+                        #     position="'center'"),
+
                         emphasis=dict(show=True,
                                       textStyle=dict(
-                                          fontSize="'30'",
+                                          # fontSize="'30'",
                                           fontWeight="'bold'"))
                     ),
                     labelLine=dict(
                         normal=dict(
-                            show=False
+                            show=True
                         )
                     ),
                     data=[
