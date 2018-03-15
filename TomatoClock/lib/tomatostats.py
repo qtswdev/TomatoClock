@@ -165,6 +165,7 @@ class TomatoStats:
                 }
             </style>
             %s
+            <br>
             <hr>
             <table width=95%% align=center>
                 <tr>
@@ -274,7 +275,8 @@ class TomatoStats:
                       FROM tomato_session ts
                       WHERE ended IS NOT NULL
                               AND date(ts.tomato_dt) >= ?
-                              AND ts.deck in ({}))
+                              AND ts.deck in ({})
+                              order by ts.tomato_dt desc)
                 GROUP BY TOMATO_DT
                 """.format("'" + "','".join(
                     [unicode(self.db.deck['id']), ] if self._report_type == 'current' else self.db.all_decks_id,
@@ -296,8 +298,9 @@ class TomatoStats:
                 _ = deepcopy(default_values)
                 for i, zv in enumerate(default_values):
                     if i in values_index:
-                        _[i] = default_values[i] + value_list.pop()
-                        if not value_list:
+                        if value_list:
+                            _[i] = default_values[i] + value_list.pop(0)
+                        else:
                             break
                 return _
 

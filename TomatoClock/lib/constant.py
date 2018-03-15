@@ -7,7 +7,7 @@ ADDON_CD = 1608644302
 HAS_SET_UP = False
 DEBUG = False
 MIN_SECS = 1 if DEBUG else 60
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 STATISTICS_PY = "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/tomatostats.py"
 REST_MINS = 5
 
@@ -80,5 +80,15 @@ UPDATE_LOGS = (
         <ol>
             <li>Added: Summary statistics for all decks, switch off statistic in settings </li>
         </ol>"""
+    ), (
+        "0.2.3", u"""
+        <ol>
+            <li>新增：全新番茄时钟图表。</li>
+            </ol>
+        """ if currentLang == 'zh_CN' else """
+        <ol>
+            <li>Added: Nwe Charts.</li>
+        </ol>"""
     )
+
 )

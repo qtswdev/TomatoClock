@@ -100,6 +100,7 @@ class anki_deckbrowser(DeckBrowser):
                 self.web.page().mainFrame().setScrollPosition(op))
         self.web.key = "deckBrowser"
         self._drawButtons()
+        self.web.setLinkHandler(self._linkHandler)
 
 
 class anki_overview(Overview):
