@@ -120,12 +120,12 @@ class OneClockAddon:
         mw.overview._linkHandler("study")
 
     def on_tomato(self):
+        self.db.end_session()
         self.tm.stop()
         self.pb_w.hide()
         self.pb.reset()
         mw.moveToState("overview")
         mw.overview.refresh()
-        self.db.end_session()
         if not self.dlg_rest:
             self.dlg_rest = RestDialog(mw)
             self._set_style_sheet(self.dlg_rest)

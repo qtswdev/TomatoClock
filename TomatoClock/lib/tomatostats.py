@@ -285,7 +285,7 @@ class TomatoStats:
 
             _recent_days_all = ["'%s'" % (datetime.date.today()
                                           + datetime.timedelta(0 - d)).strftime("%m/%d") for d in
-                                range(self._recent_days +1, -1, -1)]
+                                range(self._recent_days - 1, -1, -1)]
             default_values = [0] * _recent_days_all.__len__()
 
             x_dt_labels = ["'%s'" % i[0] for i in _list_data]
