@@ -209,7 +209,6 @@ class TomatoStats:
                                   </script>
                                   """.format(u"".join(reports_js)),
 
-
                                  )
             # set default selection
             # document.getElementById("sel")[2].selected = true;

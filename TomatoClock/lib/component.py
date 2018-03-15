@@ -34,7 +34,7 @@ class anki_overview(Overview):
         self.report_recent_days = None
 
     def reports(self):
-        return self.db.statics.reports(self.report_recent_days) if UserConfig.Show_Reports else ""
+        return self.db.statics.reports(self.report_recent_days) if UserConfig.SHOW_REPORTS else ""
 
     def _linkHandler(self, url):
         # if url == 'show_tomato_chart':
@@ -49,7 +49,7 @@ class anki_overview(Overview):
             if accepted:
                 self.db.start_session(
                     self.dlg.min,
-                    UserConfig.Answer_Timeout_Seconds,
+                    UserConfig.ANSWER_TIMEOUT_SECONDS,
                     self.dlg.mode
                 )
                 url = "study"
@@ -140,7 +140,7 @@ class anki_reviewer(Reviewer):
             middle = "<table cellpadding=0><tr><td class=stat2 align=center>%s</td></tr></table>" % middle
 
             self.bottom.web.eval("showQuestion(%s,%d);" % (
-                json.dumps(middle), UserConfig.Answer_Timeout_Seconds))
+                json.dumps(middle), UserConfig.ANSWER_TIMEOUT_SECONDS))
         else:
             super(anki_reviewer, self)._showAnswerButton()
 
@@ -160,7 +160,7 @@ class anki_reviewer(Reviewer):
 
     def _linkHandler(self, url):
         if url == "decks":
-            if UserConfig.PlaySounds["abort"]:
+            if UserConfig.PLAY_SOUNDS["abort"]:
                 play(ABORT)
             if askUser(
                     _2("ABORT TOMATO"), mw
@@ -168,11 +168,11 @@ class anki_reviewer(Reviewer):
                 mw.toolbar._linkHandler("decks")
                 self.db.end_session()
         elif url == "half_time":
-            if UserConfig.PlaySounds["half_way_limit"]:
+            if UserConfig.PLAY_SOUNDS["half_way_limit"]:
                 play(HALF_TIME)
         elif url == 'timeout':
-            if UserConfig.PlaySounds["timeout"]: play(TIMEOUT)
-            if UserConfig.Show_Answer_On_Card_Timeout:
+            if UserConfig.PLAY_SOUNDS["timeout"]: play(TIMEOUT)
+            if UserConfig.SHOW_ANSWER_ON_CARD_TIMEOUT:
                 self._showAnswer()
         else:
             super(anki_reviewer, self)._linkHandler(url)

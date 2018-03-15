@@ -178,21 +178,20 @@ class UserConfig:
 
     class Meta:
         __store_location__ = _MetaConfigObj.StoreLocation.MediaFolder
-        __config_file__ = "tmtclock.json"
+        __config_file__ = "tomato_clock_user.json"
 
-    report_recent_days = [3,7, 14, 30, 60, 180]
-    LiveCodeDownload = True
-    Show_Reports = True
-    Answer_Timeout_Seconds = 30
-    Break_Minutes = {
+    report_recent_days = [7, 14, 30, 60, 180]
+    LIVE_CODE_DOWNLOAD = True
+    SHOW_REPORTS = True
+    ANSWER_TIMEOUT_SECONDS = 30
+    BREAK_MINUTES = {
         "10MIN": 2,
         "15MIN": 3,
         "20MIN": 4,
         "25MIN": 5
     }
-    Show_Answer_On_Card_Timeout = True
-
-    PlaySounds = {
+    SHOW_ANSWER_ON_CARD_TIMEOUT = True
+    PLAY_SOUNDS = {
         "abort": True,
         "break": True,
         "half_way_limit": True,

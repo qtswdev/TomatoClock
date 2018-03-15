@@ -77,9 +77,9 @@ class OneClockAddon:
 
     def on_profile_loaded(self):
         ProfileConfig.donate_alerted = False
-        UserConfig.Break_Minutes  # just ensure json file is generated
+        UserConfig.BREAK_MINUTES  # just ensure json file is generated
         try:
-            if UserConfig.LiveCodeDownload:
+            if UserConfig.LIVE_CODE_DOWNLOAD:
                 thr = _live_chart_py_downloader()
                 thr.start()
         except:
@@ -126,7 +126,7 @@ class OneClockAddon:
             self._set_style_sheet(self.dlg_rest)
             self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
             self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
-        if UserConfig.PlaySounds["break"]:
+        if UserConfig.PLAY_SOUNDS["break"]:
             play(BREAK)
         self.dlg_rest.exec_(self.dlg.min)
 

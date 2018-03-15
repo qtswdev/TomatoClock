@@ -121,6 +121,6 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
     def exec_(self):
         if not self.updater.isRunning():
             self.updater.start()
-        if UserConfig.PlaySounds["start"]:
+        if UserConfig.PLAY_SOUNDS["start"]:
             play(START)
         return super(OneClock, self).exec_()
