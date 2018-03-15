@@ -169,8 +169,6 @@ class OneClockAddon:
         self.pb_w.setTitleBarWidget(w)
         self.pb_w.setFeatures(QDockWidget.NoDockWidgetFeatures)
 
-        ## Note: if there is another widget already in this dock position, we have to add ourself to the list
-
         # first check existing widgets
         existing_widgets = [widget for widget in mw.findChildren(QDockWidget) if mw.dockWidgetArea(widget) == dockArea]
 
