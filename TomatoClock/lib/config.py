@@ -182,7 +182,6 @@ class UserConfig:
 
     report_recent_days = [7, 14, 30, 60, 180]
     LIVE_CODE_DOWNLOAD = True
-    SHOW_REPORTS = True
     ANSWER_TIMEOUT_SECONDS = 30
     BREAK_MINUTES = {
         "10MIN": 2,
@@ -198,3 +197,5 @@ class UserConfig:
         "start": True,
         "timeout": True,
     }
+    SHOW_DECK_STATISTICS = True
+    SHOW_OVERALL_STATISTICS = True

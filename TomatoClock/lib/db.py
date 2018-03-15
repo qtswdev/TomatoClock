@@ -1,10 +1,10 @@
 import atexit
 import datetime
 
-from ..lib.config import UserConfig
 from anki.cards import Card
 from anki.db import DB
 from aqt import mw
+from ..lib.config import UserConfig
 from ..lib.constant import MIN_SECS, DEBUG
 
 CREATION_SQL = """
@@ -85,7 +85,7 @@ class TomatoDB(DB):
             except:
                 m = _load_stats_mod()
 
-        return m['TomatoStats'](self, DEBUG,UserConfig)
+        return m['TomatoStats'](self, DEBUG, UserConfig)
 
     def _start_ensure_tables(self):
         self.executescript(CREATION_SQL)
@@ -125,6 +125,10 @@ class TomatoDB(DB):
         :rtype:
         """
         return mw.col.decks.current()
+
+    @property
+    def all_decks_id(self):
+        return [d for d in mw.col.decks.decks]
 
     @property
     def now(self):

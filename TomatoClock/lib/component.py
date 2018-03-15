@@ -11,6 +11,7 @@ from TomatoClock.lib.constant import UPDATE_LOGS, __version__
 from anki.lang import _
 from anki.sound import play
 from aqt import mw
+from aqt.deckbrowser import DeckBrowser
 from aqt.overview import Overview
 from aqt.reviewer import Reviewer
 from aqt.utils import askUser
@@ -20,6 +21,85 @@ from ..lib.db import TomatoDB
 from ..lib.lang import _ as trans, currentLang
 from ..lib.sounds import ABORT, HALF_TIME, TIMEOUT
 from ..ui.OneClock import OneClock
+
+
+class anki_deckbrowser(DeckBrowser):
+
+    def __init__(self, db):
+        super(anki_deckbrowser, self).__init__(mw)
+        self.db = db
+        self.report_recent_days = None
+
+    def reports(self):
+        return self.db.statics.reports(self.report_recent_days, "all") \
+            if UserConfig.SHOW_OVERALL_STATISTICS else ""
+
+    def _linkHandler(self, url):
+        if url.startswith("report_refresh"):
+            self.report_recent_days = int(url.replace("report_refresh", ""))
+            mw.deckBrowser.refresh()
+        super(anki_deckbrowser, self)._linkHandler(url)
+
+    _body = """
+        <center>
+        <table cellspacing=0 cellpading=3>
+        %(tree)s
+        </table>
+
+        <br>
+        %(stats)s
+        %(countwarn)s
+        
+        %(tomato_summary)s
+        </center>
+        <script>
+            $( init );
+
+            function init() {
+
+                $("tr.deck").draggable({
+                    scroll: false,
+
+                    // can't use "helper: 'clone'" because of a bug in jQuery 1.5
+                    helper: function (event) {
+                        return $(this).clone(false);
+                    },
+                    delay: 200,
+                    opacity: 0.7
+                });
+                $("tr.deck").droppable({
+                    drop: handleDropEvent,
+                    hoverClass: 'drag-hover',
+                });
+                $("tr.top-level-drag-row").droppable({
+                    drop: handleDropEvent,
+                    hoverClass: 'drag-hover',
+                });
+            }
+
+            function handleDropEvent(event, ui) {
+                var draggedDeckId = ui.draggable.attr('id');
+                var ontoDeckId = $(this).attr('id');
+
+                py.link("drag:" + draggedDeckId + "," + ontoDeckId);
+            }
+        </script>
+        """
+
+    def _renderPage(self, reuse=False):
+        css = self.mw.sharedCSS + self._css
+        if not reuse:
+            self._dueTree = self.mw.col.sched.deckDueTree()
+        tree = self._renderDeckTree(self._dueTree)
+        stats = self._renderStats()
+        op = self._oldPos()
+        self.web.stdHtml(self._body % dict(
+            tomato_summary=self.reports(),
+            tree=tree, stats=stats, countwarn=self._countWarn()), css=css,
+                         js=anki.js.jquery + anki.js.ui, loadCB=lambda ok: \
+                self.web.page().mainFrame().setScrollPosition(op))
+        self.web.key = "deckBrowser"
+        self._drawButtons()
 
 
 class anki_overview(Overview):
@@ -34,7 +114,7 @@ class anki_overview(Overview):
         self.report_recent_days = None
 
     def reports(self):
-        return self.db.statics.reports(self.report_recent_days) if UserConfig.SHOW_REPORTS else ""
+        return self.db.statics.reports(self.report_recent_days) if UserConfig.SHOW_DECK_STATISTICS else ""
 
     def _linkHandler(self, url):
         # if url == 'show_tomato_chart':

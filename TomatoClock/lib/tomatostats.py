@@ -56,9 +56,11 @@ class TomatoStats:
         self.db = db
         self._data_by_dates = []
         self._recent_days = None
+        self._report_type = None
 
-    def reports(self, recent_days):
+    def reports(self, recent_days, report_type="current"):
         self._recent_days = recent_days
+        self._report_type = report_type
 
         reports_js = [
             self._chart_tomato_cnt(),
@@ -254,11 +256,13 @@ class TomatoStats:
                          WHERE ts.id = tsi.session_id)                                                     CARDS_CNT,
                          round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2) >= ts.target_secs COMPLETE_TOMATO_CNT
                       FROM tomato_session ts
-                      WHERE ended IS NOT NULL 
+                      WHERE ended IS NOT NULL
                               AND date(ts.tomato_dt) >= ?
-                              AND ts.deck = ?)
+                              AND ts.deck in ({}))
                 GROUP BY TOMATO_DT
-                """, self.report_days, self.db.deck['id']).fetchall()
+                """.format("'" + "','".join(
+                    [unicode(self.db.deck['id']),] if self._report_type == 'current' else self.db.all_decks_id,
+                ) + "'"), self.report_days).fetchall()
 
             if not _list_data:
                 self._data_by_dates = [[], [], [], [], []]
@@ -371,10 +375,11 @@ class TomatoStats:
             FROM tomato_session ts
             WHERE ended IS NOT NULL 
                   AND ts.tomato_dt >= ?
-                  AND ts.deck = ?
+                  AND ts.deck in ({})
             GROUP BY strftime('%H',ts.started)
             ORDER BY strftime('%H',ts.started)
-            """, self.report_days, self.db.deck['id']).fetchall()
+            """.format("'" + "','".join([unicode(self.db.deck['id']),] if self._report_type == 'current' else self.db.all_decks_id,
+                ) + "'"), self.report_days).fetchall()
 
         if not _list_data:
             return ''

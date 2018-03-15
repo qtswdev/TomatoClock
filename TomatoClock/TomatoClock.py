@@ -10,7 +10,7 @@ from PyQt4.QtGui import QDockWidget, QWidget, QIcon
 from anki.sound import play
 from aqt import mw
 from aqt.main import AnkiQt
-from .lib.component import anki_overview, anki_reviewer
+from .lib.component import anki_overview, anki_reviewer, anki_deckbrowser
 from .lib.config import ProfileConfig, UserConfig
 from .lib.constant import MIN_SECS, STATISTICS_PY
 from .lib.db import TomatoDB
@@ -56,12 +56,17 @@ class OneClockAddon:
         self.db = TomatoDB("_TomatoClock.db")
         self.replace_mw_overview()
         self.replace_mw_reviewer()
+        self.replace_mw_deckbrowser()
 
     def replace_mw_overview(self):
         mw.overview = anki_overview(self.dlg, self.db)
 
     def replace_mw_reviewer(self):
         mw.reviewer = anki_reviewer(self.dlg.mode, self.db)
+
+    def replace_mw_deckbrowser(self):
+        mw.deckBrowser = anki_deckbrowser(self.db)
+        mw.deckBrowser.refresh()
 
     @staticmethod
     def _set_style_sheet(obj):
