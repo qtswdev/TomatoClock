@@ -267,7 +267,8 @@ class TomatoStats:
                         (strftime('%s', ts.ended) - strftime('%s', ts.started)) / round(ts.target_secs, 1) TOMATO_CNT,
                         (SELECT count(*)
                          FROM tomato_session_item tsi
-                         WHERE ts.id = tsi.session_id)                                                     CARDS_CNT,
+                         WHERE ts.id = tsi.session_id 
+                         and tsi.answer_btn is not null) CARDS_CNT,
                          round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2) >= ts.target_secs COMPLETE_TOMATO_CNT
                       FROM tomato_session ts
                       WHERE ended IS NOT NULL
@@ -469,17 +470,22 @@ class TomatoStats:
          ) = self.data_by_dates()
 
         total_studied_hour = round(sum(y_tomato_min) / 60.0, 2)
-        total_tomato = int(sum(cmp_tomato_cnt))
+        total_tomato = round(sum(y_tomato_count),2)
 
         if y_tomato_min:
             today_total_min = round(y_tomato_min[-1], 2)
         else:
             today_total_min = 0
 
-        if cmp_tomato_cnt:
-            today_total_tomato = int(cmp_tomato_cnt[-1])
+        if y_tomato_count:
+            today_total_tomato = round(y_tomato_count[-1],2)
         else:
             today_total_tomato = 0
+
+        # if cmp_tomato_cnt:
+        #     today_total_cmp_tomato = int(cmp_tomato_cnt[-1])
+        # else:
+        #     today_total_cmp_tomato = 0
 
         if y_tomato_target_min:
             _today_targets = round(y_tomato_target_min[-1], 2)
