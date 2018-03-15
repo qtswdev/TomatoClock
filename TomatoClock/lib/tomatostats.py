@@ -4,6 +4,7 @@
 import datetime
 import json
 import os
+from copy import deepcopy
 from operator import itemgetter
 from urllib import urlretrieve
 
@@ -66,7 +67,8 @@ class TomatoStats:
         self._report_type = None
 
     def reports(self, recent_days, report_type="current"):
-        self._recent_days = recent_days
+        days = [7, 14, 30, 60, 180] if not self.user_config else self.user_config.report_recent_days
+        self._recent_days = recent_days if recent_days else days[0]
         self._report_type = report_type
 
         reports_js = [
@@ -131,7 +133,6 @@ class TomatoStats:
                 today_tomato_pctg_val=today_tomato_pctg
             )
 
-            days = [7, 14, 30, 60, 180] if not self.user_config else self.user_config.report_recent_days
             html = u"""
             <style>
                 * {
@@ -254,22 +255,22 @@ class TomatoStats:
                 """
                 SELECT
                   TOMATO_DT,
-                  sum(TOMATO_MINS) TT_TOMATO_MINS,
-                  sum(TARGET_MINS) TT_TGT_MINS,
+                  sum(TOMATO_SECS) TT_TOMATO_SECS,
+                  sum(TARGET_SECS) TT_TGT_SECS,
                   sum(TOMATO_CNT)  TT_TOMATO_CNT,
                   sum(CARDS_CNT)   TT_CARDS_COUNT,
                   sum(COMPLETE_TOMATO_CNT) TT_CMP_TOMATO_CNT,
                   count(COMPLETE_TOMATO_CNT) TT_TRIED_TOMATO_CNT
                 FROM (SELECT
                         strftime('%m/%d', ts.tomato_dt)                                                    TOMATO_DT,
-                        (strftime('%s', ts.ended) - strftime('%s', ts.started)) / 60.0                     TOMATO_MINS,
-                        ts.target_secs / 60.0                                                              TARGET_MINS,
-                        (strftime('%s', ts.ended) - strftime('%s', ts.started)) / round(ts.target_secs, 1) TOMATO_CNT,
+                        (strftime('%s', ts.ended) - strftime('%s', ts.started))                  TOMATO_SECS,
+                        ts.target_secs                                                         TARGET_SECS,
+                        (strftime('%s', ts.ended) - strftime('%s', ts.started)) / ts.target_secs TOMATO_CNT,
                         (SELECT count(*)
                          FROM tomato_session_item tsi
                          WHERE ts.id = tsi.session_id 
                          and tsi.answer_btn is not null) CARDS_CNT,
-                         round((strftime('%s', ts.ended) - strftime('%s', ts.started)), 2) >= ts.target_secs COMPLETE_TOMATO_CNT
+                         (strftime('%s', ts.ended) - strftime('%s', ts.started)) >= ts.target_secs COMPLETE_TOMATO_CNT
                       FROM tomato_session ts
                       WHERE ended IS NOT NULL
                               AND date(ts.tomato_dt) >= ?
@@ -282,15 +283,33 @@ class TomatoStats:
             if not _list_data:
                 self._data_by_dates = [[], [], [], [], []]
 
-            x_dt_labels = ["'%s'" % i[0] for i in _list_data]
-            y_tomato_min = [round(i[1], 2) for i in _list_data]
-            y_tomato_target_min = [round(i[2], 2) for i in _list_data]
-            y_tomato_count = [round(i[3], 2) for i in _list_data]
-            y_cards_count = [round(i[4], 2) for i in _list_data]
-            cmp_tomato_cnt = [round(i[5], 2) for i in _list_data]
-            tried_tomato_cnt = [round(i[6], 2) for i in _list_data]
+            _recent_days_all = ["'%s'" % (datetime.date.today()
+                                          + datetime.timedelta(0 - d)).strftime("%m/%d") for d in
+                                range(self._recent_days + 1, 0, -1)]
+            default_values = [0] * _recent_days_all.__len__()
 
-            self._data_by_dates = [x_dt_labels, y_tomato_count,
+            x_dt_labels = ["'%s'" % i[0] for i in _list_data]
+
+            values_index = [i for i, days_txt in enumerate(_recent_days_all) if days_txt in x_dt_labels]
+
+            def _refill_value(value_list):
+                _ = deepcopy(default_values)
+                for i, zv in enumerate(default_values):
+                    if i in values_index:
+                        _[i] = default_values[i] + value_list.pop()
+                        if not value_list:
+                            break
+                return _
+
+            y_tomato_min = _refill_value([round(i[1] / 60.0, 2) for i in _list_data])
+
+            y_tomato_target_min = _refill_value([round(i[2] / 60.0, 2) for i in _list_data])
+            y_tomato_count = _refill_value([round(i[3], 2) for i in _list_data])
+            y_cards_count = _refill_value([round(i[4], 2) for i in _list_data])
+            cmp_tomato_cnt = _refill_value([round(i[5], 2) for i in _list_data])
+            tried_tomato_cnt = _refill_value([round(i[6], 2) for i in _list_data])
+
+            self._data_by_dates = [_recent_days_all, y_tomato_count,
                                    y_tomato_min, y_tomato_target_min,
                                    y_cards_count, cmp_tomato_cnt, tried_tomato_cnt]
         return self._data_by_dates
@@ -470,7 +489,7 @@ class TomatoStats:
          ) = self.data_by_dates()
 
         total_studied_hour = round(sum(y_tomato_min) / 60.0, 2)
-        total_tomato = round(sum(y_tomato_count),2)
+        total_tomato = round(sum(y_tomato_count), 2)
 
         if y_tomato_min:
             today_total_min = round(y_tomato_min[-1], 2)
@@ -478,7 +497,7 @@ class TomatoStats:
             today_total_min = 0
 
         if y_tomato_count:
-            today_total_tomato = round(y_tomato_count[-1],2)
+            today_total_tomato = round(y_tomato_count[-1], 2)
         else:
             today_total_tomato = 0
 
