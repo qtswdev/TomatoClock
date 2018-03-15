@@ -314,7 +314,7 @@ class TomatoStats:
                 dict(
                     name=_("'Minutes Studied'"),
                     type=u"'bar'",
-                    data=y_tomato_min
+                    data=[round(m, 2) for m in y_tomato_min]
                 )
             ]
         )
@@ -341,7 +341,7 @@ class TomatoStats:
                 dict(
                     name=_("'Tomato Count'"),
                     type=u"'bar'",
-                    data=y_tomato_count
+                    data=[round(c, 2) for c in y_tomato_count]
                 )
             ]
         )
@@ -374,7 +374,7 @@ class TomatoStats:
             yAxis=dict(type="'value'"),
             series=[dict(
                 name=_("'Cards'"),
-                data=y_cards_count,
+                data=[round(c, 2) for c in y_cards_count],
                 type="'line'",
                 smoth=True,
                 label=dict(
@@ -452,7 +452,7 @@ class TomatoStats:
             yAxis=dict(type="'value'"),
             series=[dict(
                 name=_("'Best Focus Hour'"),
-                data=mins_stutied,
+                data=[round(m, 2) for m in mins_stutied],
                 type="'line'",
                 label=dict(
                     normal=dict(
