@@ -18,7 +18,7 @@ trans = {
     "'Count of Tomatoes and Minutes'": {'zh_CN': u"'番茄和学习分钟'",
                                         'en': u"'Count of Tomatoes and Minutes'"},
     "'Tomato Count'": {'zh_CN': u"'番茄个数'", 'en': u"'Tomato Count'"},
-    "'Productivity'": {'zh_CN': u"'卡片/番茄'", 'en': u"'Cards/Tomato'"},
+    "'Cards'": {'zh_CN': u"'卡片'", 'en': u"'Cards'"},
     "'{a} <br/>{b} Clock: {c} Minutes'": {'zh_CN': u"'{a} <br/>{b} 点: {c} 分钟'",
                                           'en': u"'{a} <br/>{b} Clock: {c} Minutes'"},
 
@@ -356,26 +356,34 @@ class TomatoStats:
         if not x_dt_labels:
             return ''
 
-        try:
-            y_cards_per_tomato = [round(a / b, 2) for a, b in zip(y_cards_count, y_tomato_count)]
-        except ZeroDivisionError:
-            y_cards_per_tomato = 0
-
         conf = dict(
             tooltip=dict(
-                trigger="'item'",
+                trigger="'axis'",
+                axisPointer=dict(
+                    type="'cross'",
+                    label=dict(
+                        backgroundColor="'#6a7985'"
+                    )
+                )
             ),
             title={
-                "subtext": _("'Productivity'")
+                "subtext": _("'Cards'")
             },
             xAxis=dict(type="'category'",
                        data=x_dt_labels),
             yAxis=dict(type="'value'"),
             series=[dict(
-                name=_("'Productivity'"),
-                data=y_cards_per_tomato,
+                name=_("'Cards'"),
+                data=y_cards_count,
                 type="'line'",
-                smoth=True), ]
+                smoth=True,
+                label=dict(
+                    normal=dict(
+                        show=True,
+                        position="'top'"
+
+                    ),
+                )), ]
         )
 
         return self._graph("cards_per_tomato_cnt", conf)
@@ -426,8 +434,14 @@ class TomatoStats:
 
         conf = dict(
             tooltip=dict(
-                trigger="'item'",
-                formatter=_("'{a} <br/>{b} Clock: {c} Minutes'")
+                formatter=_("'{a} <br/>{b} Clock: {c} Minutes'"),
+                trigger="'axis'",
+                axisPointer=dict(
+                    type="'cross'",
+                    label=dict(
+                        backgroundColor="'#6a7985'"
+                    )
+                )
             ),
             title={
                 # "text": "'Count of Tomatoes and Minutes'",
@@ -440,6 +454,11 @@ class TomatoStats:
                 name=_("'Best Focus Hour'"),
                 data=mins_stutied,
                 type="'line'",
+                label=dict(
+                    normal=dict(
+                        show=True,
+                        position="'top'")
+                ),
                 areaStyle={}), ]
         )
         return self._graph("tomato_hour", conf)
@@ -469,7 +488,7 @@ class TomatoStats:
 
         if _today_targets:
             val = round(today_total_min / _today_targets, 4) * 100
-            if val >= 100:
+            if val >= 100:  # floating problem, not an issue
                 val = 100
             today_min_pctg = u"{}%".format(val)
         else:
