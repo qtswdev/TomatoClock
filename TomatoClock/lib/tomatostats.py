@@ -266,7 +266,7 @@ class TomatoStats:
                         strftime('%m/%d', ts.tomato_dt)                                                    TOMATO_DT,
                         (strftime('%s', ts.ended) - strftime('%s', ts.started))                  TOMATO_SECS,
                         ts.target_secs                                                         TARGET_SECS,
-                        (strftime('%s', ts.ended) - strftime('%s', ts.started)) / ts.target_secs TOMATO_CNT,
+                        (strftime('%s', ts.ended) - strftime('%s', ts.started)) / (ts.target_secs*1.0) TOMATO_CNT,
                         (SELECT count(*)
                          FROM tomato_session_item tsi
                          WHERE ts.id = tsi.session_id 
