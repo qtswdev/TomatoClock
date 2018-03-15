@@ -3,7 +3,11 @@
 # Project : TomatoClock
 import datetime
 import json
+import os
 from operator import itemgetter
+from urllib import urlretrieve
+
+from PyQt4.QtCore import QUrl, QDir
 
 trans = {
     'TOMATO COLOCK': {'zh_CN': u'番茄时钟', 'en': u'Tomato Clock'},
@@ -44,6 +48,9 @@ def _(key):
     if key not in trans or lang not in trans[key]:
         return disp(key)
     return trans[key][lang]
+
+
+_echart_js = u"http://echarts.baidu.com/examples/vendors/echarts/echarts.min.js"
 
 
 class TomatoStats:
@@ -219,9 +226,16 @@ class TomatoStats:
 
     @property
     def _js_ref(self):
-        return u"""
-        <script src="http://echarts.baidu.com/examples/vendors/echarts/echarts.min.js"></script>
-        """
+        _script_src = ''
+        js_file = u"_" + os.path.basename(_echart_js)
+        try:
+            if not os.path.exists(js_file):
+                urlretrieve(_echart_js, js_file)
+            _script_src = QUrl.fromLocalFile(QDir.current().filePath(js_file)).toString()
+        except Exception as exc:
+            print('Download %s failed, using CDN: %s' % (_echart_js, exc))
+            _script_src = _echart_js
+        return u"""<script src='""" + _script_src + u"""'></script>"""
 
     def _graph(self, id, conf):
         id = unicode(id, encoding="utf-8")
@@ -261,7 +275,7 @@ class TomatoStats:
                               AND ts.deck in ({}))
                 GROUP BY TOMATO_DT
                 """.format("'" + "','".join(
-                    [unicode(self.db.deck['id']),] if self._report_type == 'current' else self.db.all_decks_id,
+                    [unicode(self.db.deck['id']), ] if self._report_type == 'current' else self.db.all_decks_id,
                 ) + "'"), self.report_days).fetchall()
 
             if not _list_data:
@@ -378,8 +392,9 @@ class TomatoStats:
                   AND ts.deck in ({})
             GROUP BY strftime('%H',ts.started)
             ORDER BY strftime('%H',ts.started)
-            """.format("'" + "','".join([unicode(self.db.deck['id']),] if self._report_type == 'current' else self.db.all_decks_id,
-                ) + "'"), self.report_days).fetchall()
+            """.format("'" + "','".join(
+                [unicode(self.db.deck['id']), ] if self._report_type == 'current' else self.db.all_decks_id,
+            ) + "'"), self.report_days).fetchall()
 
         if not _list_data:
             return ''
@@ -441,6 +456,7 @@ class TomatoStats:
             today_total_min = round(y_tomato_min[-1], 2)
         else:
             today_total_min = 0
+
         if cmp_tomato_cnt:
             today_total_tomato = int(cmp_tomato_cnt[-1])
         else:
@@ -450,10 +466,15 @@ class TomatoStats:
             _today_targets = round(y_tomato_target_min[-1], 2)
         else:
             _today_targets = 0
+
         if _today_targets:
-            today_min_pctg = u"{}%".format(round(today_total_min / _today_targets, 4) * 100)
+            val = round(today_total_min / _today_targets, 4) * 100
+            if val >= 100:
+                val = 100
+            today_min_pctg = u"{}%".format(val)
         else:
             today_min_pctg = u"0.00%"
+
         if tried_tomato_cnt and tried_tomato_cnt[-1]:
             today_tomato_pctg = u"{}%".format(round(today_total_tomato / tried_tomato_cnt[-1], 4) * 100)
         else:
