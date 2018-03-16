@@ -199,7 +199,7 @@ class TomatoStats:
             <hr>
             %s
             """
-            return_val = html % (self._js_ref,
+            return_val = html % (self._js_ref + self._them_js_ref,
 
                                  summary_table_html,
 
@@ -226,24 +226,30 @@ class TomatoStats:
             return return_val
         return ''
 
-    @property
-    def _js_ref(self):
-        _script_src = ''
-        js_file = u"_" + os.path.basename(_echart_js)
+    def _ref_js(self,js_source):
+        js_file = u"_" + os.path.basename(js_source)
         try:
             if not os.path.exists(js_file):
-                urlretrieve(_echart_js, js_file)
+                urlretrieve(js_source, js_file)
             _script_src = QUrl.fromLocalFile(QDir.current().filePath(js_file)).toString()
         except Exception as exc:
-            print('Download %s failed, using CDN: %s' % (_echart_js, exc))
-            _script_src = _echart_js
+            print('Download %s failed, using CDN: %s' % (js_source, exc))
+            _script_src = js_source
         return u"""<script src='""" + _script_src + u"""'></script>"""
+
+    @property
+    def _js_ref(self):
+        return self._ref_js(_echart_js)
+
+    @property
+    def _them_js_ref(self):
+        return '' #self._ref_js("http://echarts.baidu.com/asset/theme/vintage.js")#
 
     def _graph(self, id, conf):
         id = unicode(id, encoding="utf-8")
         html = u"""
-        echarts.init(document.getElementById('%(id)s')).setOption(%(conf)s);
-        """ % dict(id=id, conf=json.dumps(conf).replace("\"", ""))
+        echarts.init(document.getElementById('%(id)s'),'%(theme)s').setOption(%(conf)s);
+        """ % dict(id=id, conf=json.dumps(conf).replace("\"", ""), theme = '')
         return html
 
     @property
