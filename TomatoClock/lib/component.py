@@ -123,21 +123,13 @@ class anki_overview(Overview):
 
         if url == 'tomato_clock':
             self.show_update_logs()
-            # self.dlg.setWindowOpacity(0.9)
             self.dlg.btn_start.setText(anki.lang._("Study Now"))
-            accepted = self.dlg.exec_()
-
-            if accepted:
-                self.db.start_session(
-                    self.dlg.min,
-                    UserConfig.ANSWER_TIMEOUT_SECONDS,
-                    self.dlg.mode
-                )
-                url = "study"
+            self.dlg.exec_()
         elif url.startswith("report_refresh"):
             self.report_recent_days = int(url.replace("report_refresh", ""))
             mw.overview.refresh()
-        super(anki_overview, self)._linkHandler(url)
+        else:
+            super(anki_overview, self)._linkHandler(url)
 
     def show_update_logs(self):
         if ProfileConfig.ttc_current_version != self.addon_version:

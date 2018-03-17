@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
+
 import os
 from threading import Thread
 from urllib import urlretrieve
@@ -45,7 +47,9 @@ class _live_chart_py_downloader(Thread):
 class OneClockAddon:
 
     def __init__(self):
+        self.db = TomatoDB("_TomatoClock.db")
         self.dlg = OneClock(mw)
+
         self.pb = None
         self._connect_slots()
         self._set_style_sheet(mw)
@@ -53,7 +57,6 @@ class OneClockAddon:
         self.dlg_rest = None
         self.pb_w = None
 
-        self.db = TomatoDB("_TomatoClock.db")
         self.replace_mw_overview()
         self.replace_mw_reviewer()
         self.replace_mw_deckbrowser()
@@ -118,6 +121,12 @@ class OneClockAddon:
 
         # click study button
         mw.overview._linkHandler("study")
+
+        self.db.start_session(
+            self.dlg.min,
+            UserConfig.ANSWER_TIMEOUT_SECONDS,
+            self.dlg.mode
+        )
 
     def on_tomato(self):
         self.db.end_session()
