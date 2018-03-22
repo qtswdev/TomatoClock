@@ -82,6 +82,7 @@ class OneClockAddon:
     def perform_hooks(self, func):
         func('reviewCleanup', self.on_review_cleanup)
         func('profileLoaded', self.on_profile_loaded)
+        func('afterStateChange', self.after_anki_state_change)
 
     def on_profile_loaded(self):
         ProfileConfig.donate_alerted = False
@@ -128,13 +129,18 @@ class OneClockAddon:
             self.dlg.mode
         )
 
-    def on_tomato(self):
+    def after_anki_state_change(self, state, oldState):
+        if state == 'overview' and oldState == 'review':
+            self.on_tomato(False)
+
+    def on_tomato(self, move_to_overview=True):
         self.db.end_session()
         self.tm.stop()
         self.pb_w.hide()
         self.pb.reset()
-        mw.moveToState("overview")
-        mw.overview.refresh()
+        if move_to_overview:
+            mw.moveToState("overview")
+            mw.overview.refresh()
         if not self.dlg_rest:
             self.dlg_rest = RestDialog(mw)
             self._set_style_sheet(self.dlg_rest)
