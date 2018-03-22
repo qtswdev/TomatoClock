@@ -132,6 +132,7 @@ class OneClockAddon:
     def after_anki_state_change(self, state, oldState):
         if state == 'overview' and oldState == 'review':
             self.on_tomato(False)
+            mw.overview.refresh()
 
     def on_tomato(self, from_timer=True):
         self.db.end_session()
@@ -140,7 +141,6 @@ class OneClockAddon:
         self.pb.reset()
         if from_timer:
             mw.moveToState("overview")
-            mw.overview.refresh()
             if not self.dlg_rest:
                 self.dlg_rest = RestDialog(mw)
                 self._set_style_sheet(self.dlg_rest)

@@ -238,8 +238,9 @@ class anki_reviewer(Reviewer):
             if askUser(
                     _2("ABORT TOMATO"), mw
             ):
-                mw.toolbar._linkHandler("decks")
                 self.db.end_session()
+                mw.toolbar._linkHandler("decks")
+                mw.deckBrowser.refresh()
         elif url == "half_time":
             if UserConfig.PLAY_SOUNDS["half_way_limit"]:
                 play(HALF_TIME)

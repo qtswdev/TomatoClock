@@ -224,7 +224,7 @@ class TomatoStats:
             return return_val
         return ''
 
-    def _ref_js(self,js_source):
+    def _ref_js(self, js_source):
         js_file = u"_" + os.path.basename(js_source)
         try:
             if not os.path.exists(js_file):
@@ -241,18 +241,18 @@ class TomatoStats:
 
     @property
     def _them_js_ref(self):
-        return '' #self._ref_js("http://echarts.baidu.com/asset/theme/vintage.js")#
+        return ''  # self._ref_js("http://echarts.baidu.com/asset/theme/vintage.js")#
 
     def _graph(self, id, conf):
         id = unicode(id, encoding="utf-8")
         html = u"""
         echarts.init(document.getElementById('%(id)s'),'%(theme)s').setOption(%(conf)s);
-        """ % dict(id=id, conf=json.dumps(conf).replace("\"", ""), theme = '')
+        """ % dict(id=id, conf=json.dumps(conf).replace("\"", ""), theme='')
         return html
 
     @property
     def report_days(self):
-        return (datetime.datetime.now() + datetime.timedelta(days=-7)).date()
+        return (datetime.datetime.now() + datetime.timedelta(days=-6)).date()
 
     def data_by_dates(self):
         if not self._data_by_dates:
@@ -300,12 +300,9 @@ class TomatoStats:
 
             def _refill_value(value_list):
                 _ = deepcopy(default_values)
-                for i, zv in enumerate(default_values):
-                    if i in values_index:
-                        if value_list:
-                            _[i] = default_values[i] + value_list.pop(0)
-                        else:
-                            break
+                for vi in values_index:
+                    val = value_list[vi]
+                    _[vi] += val
                 return _
 
             y_tomato_min = _refill_value([round(i[1] / 60.0, 2) for i in _list_data])

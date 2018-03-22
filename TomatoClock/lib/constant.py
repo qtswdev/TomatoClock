@@ -7,7 +7,7 @@ ADDON_CD = 1608644302
 HAS_SET_UP = False
 DEBUG = False
 MIN_SECS = 1 if DEBUG else 60
-__version__ = "0.2.33"
+__version__ = "0.2.34"
 STATISTICS_PY = "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/tomatostats.py"
 REST_MINS = 5
 
@@ -98,6 +98,15 @@ UPDATE_LOGS = (
         """ if currentLang == 'zh_CN' else """
         <ol>
             <li>Fixed: Crashing Anki when WebQuery is installed.</li>
+        </ol>"""
+    ),(
+        "0.2.34", u"""
+        <ol>
+            <li>修复：BUG FIXES。</li>
+            </ol>
+        """ if currentLang == 'zh_CN' else """
+        <ol>
+            <li>Fixed: Some Bugs</li>
         </ol>"""
     )
 

@@ -99,6 +99,7 @@ class TomatoDB(DB):
             """
         )
         self.execute("vacuum")
+        self.execute("analyze")
 
     @property
     def session_id(self):
