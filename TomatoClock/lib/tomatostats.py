@@ -134,6 +134,7 @@ class TomatoStats:
             )
 
             html = u"""
+            <html>
             <style>
                 * {
                     font-family: 'Microsoft YaHei UI', Consolas, serif;
@@ -158,10 +159,6 @@ class TomatoStats:
                     padding: 0 20px 20px 0;
                     border-radius: .25rem;
                     border-spacing: 0;
-                }
-            
-                .summary {
-                    
                 }
             </style>
             %s
@@ -198,6 +195,7 @@ class TomatoStats:
             </script>
             <hr>
             %s
+            </html>
             """
             return_val = html % (self._js_ref + self._them_js_ref,
 
@@ -433,8 +431,7 @@ class TomatoStats:
                 [unicode(self.db.deck['id']), ] if self._report_type == 'current' else self.db.all_decks_id,
             ) + "'"), self.report_days).fetchall()
 
-        if not _list_data:
-            return ''
+
 
         _list_data = sorted(_list_data, key=itemgetter(0))
         time_slots = [
@@ -455,11 +452,12 @@ class TomatoStats:
         ]
 
         mins_stutied = [0] * time_slots.__len__()
-        for i, val in enumerate(_list_data):
-            min = val[1]
-            for slot_i, time_slot_rng in enumerate(time_slots_range):
-                if time_slot_rng[0] <= int(val[0]) < time_slot_rng[1]:
-                    mins_stutied[slot_i] = mins_stutied[slot_i] + round(min, 2)
+        if _list_data:
+            for i, val in enumerate(_list_data):
+                min = val[1]
+                for slot_i, time_slot_rng in enumerate(time_slots_range):
+                    if time_slot_rng[0] <= int(val[0]) < time_slot_rng[1]:
+                        mins_stutied[slot_i] = mins_stutied[slot_i] + round(min, 2)
 
         conf = dict(
             tooltip=dict(

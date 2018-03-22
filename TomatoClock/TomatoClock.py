@@ -133,22 +133,22 @@ class OneClockAddon:
         if state == 'overview' and oldState == 'review':
             self.on_tomato(False)
 
-    def on_tomato(self, move_to_overview=True):
+    def on_tomato(self, from_timer=True):
         self.db.end_session()
         self.tm.stop()
         self.pb_w.hide()
         self.pb.reset()
-        if move_to_overview:
+        if from_timer:
             mw.moveToState("overview")
             mw.overview.refresh()
-        if not self.dlg_rest:
-            self.dlg_rest = RestDialog(mw)
-            self._set_style_sheet(self.dlg_rest)
-            self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
-            self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
-        if UserConfig.PLAY_SOUNDS["break"]:
-            play(BREAK)
-        self.dlg_rest.exec_(self.dlg.min)
+            if not self.dlg_rest:
+                self.dlg_rest = RestDialog(mw)
+                self._set_style_sheet(self.dlg_rest)
+                self.dlg_rest.accepted.connect(self.on_dlg_rest_accepted)
+                self.dlg_rest.rejected.connect(self.on_dlg_rest_rejected)
+            if UserConfig.PLAY_SOUNDS["break"]:
+                play(BREAK)
+            self.dlg_rest.exec_(self.dlg.min)
 
     @staticmethod
     def on_dlg_rest_accepted():
