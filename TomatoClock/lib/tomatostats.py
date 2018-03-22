@@ -300,9 +300,12 @@ class TomatoStats:
 
             def _refill_value(value_list):
                 _ = deepcopy(default_values)
-                for vi in values_index:
-                    val = value_list[vi]
-                    _[vi] += val
+                for i, zv in enumerate(default_values):
+                    if i in values_index:
+                        if value_list:
+                            _[i] = default_values[i] + value_list.pop(0)
+                        else:
+                            break
                 return _
 
             y_tomato_min = _refill_value([round(i[1] / 60.0, 2) for i in _list_data])
