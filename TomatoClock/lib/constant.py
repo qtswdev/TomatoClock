@@ -5,9 +5,9 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-DEBUG = True
+DEBUG = False
 MIN_SECS = 1 if DEBUG else 60
-__version__ = "0.2.32"
+__version__ = "0.2.33"
 STATISTICS_PY = "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/tomatostats.py"
 REST_MINS = 5
 
