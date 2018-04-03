@@ -152,6 +152,8 @@ class TomatoDB(DB):
         )
 
     def question_card(self):
+        if not self.session_id:
+            return
         self.execute(
             """
             INSERT INTO tomato_session_item(session_id, 
@@ -180,6 +182,8 @@ class TomatoDB(DB):
         )
 
     def end_session(self):
+        if not self.session_id:
+            return
         self.execute(
             """
             UPDATE tomato_session SET ended = ? WHERE id = ?
