@@ -99,8 +99,17 @@ UPDATE_LOGS = (
         <ol>
             <li>Fixed: Crashing Anki when WebQuery is installed.</li>
         </ol>"""
-    ),(
+    ), (
         "0.2.34", u"""
+        <ol>
+            <li>修复：BUG FIXES。</li>
+            </ol>
+        """ if currentLang == 'zh_CN' else """
+        <ol>
+            <li>Fixed: Some Bugs</li>
+        </ol>"""
+    ), (
+        "0.2.35", u"""
         <ol>
             <li>修复：BUG FIXES。</li>
             </ol>
