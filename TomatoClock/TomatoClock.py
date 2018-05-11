@@ -58,7 +58,6 @@ class OneClockAddon:
         self.pb_w = None
 
         self.replace_mw_overview()
-        self.replace_mw_reviewer()
         self.replace_mw_deckbrowser()
 
     def replace_mw_overview(self):
@@ -105,7 +104,10 @@ class OneClockAddon:
         if self.dlg_rest:
             self.dlg_rest.hide()
 
-        mw.reviewer.restore_layouts()
+        try:
+            mw.reviewer.restore_layouts()
+        except AttributeError:  # just in case "replace_mw_reviewer" is not called
+            pass
 
     def on_btn_start_clicked(self):
         self.replace_mw_reviewer()

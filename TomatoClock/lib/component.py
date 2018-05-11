@@ -164,8 +164,16 @@ class anki_overview(Overview):
                                     <tr><td>%s:</td><td><b><font color=#0a0>%s</font></b></td></tr>
                                 </table>
                             </td>
-                            
-                            <td align=center>%s</td>
+                            <td>
+                                <table>
+                                <tr>
+                                    <td align=center>%s</td>
+                                </tr>
+                                <tr>
+                                <td align=center>%s</td>
+                                </tr>
+                                </table>
+                            </td>
                         </tr>
                         
                     </table>
@@ -178,7 +186,8 @@ class anki_overview(Overview):
                 anki.lang._("New"), counts[0],
                 anki.lang._("Learning"), counts[1],
                 anki.lang._("To Review"), counts[2],
-                but("tomato_clock", anki.lang._("Study Now"), id="study"),
+                but("study", _("Study Now"), id="study"),
+                but("tomato_clock", _2("TOMATO COLOCK"), id="study"),
                 # but("show_tomato_chart", "Tomato Charts", id="tomato_chart_btn")
                 self.reports()
             )
