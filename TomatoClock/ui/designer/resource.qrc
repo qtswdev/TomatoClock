@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="icon">
+    <file>_anki365.jpg</file>
     <file>miaobiao_off.png</file>
     <file>miaobiao_on.png</file>
     <file>vote.png</file>

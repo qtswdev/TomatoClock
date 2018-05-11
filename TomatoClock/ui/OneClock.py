@@ -14,7 +14,7 @@ from ..lib.config import UserConfig
 from ..lib.constant import __version__, ADDON_CD
 from ..lib.lang import _
 from ..lib.sounds import START
-from ..ui.SharedControl import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor, VoteButton
+from ..lib.kkLib import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor, VoteButton
 
 
 class OneClock(QDialog, Ui_TomatoClockDlg):
@@ -88,7 +88,7 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
             mw.pm.addonFolder(),
             __version__
         )
-        self.verticalLayout_3.insertWidget(1, WeChatButton(self))
+        self.verticalLayout_3.insertWidget(1, WeChatButton(self, ":/icon/_anki365.jpg"))
         self.verticalLayout_3.insertWidget(2, MoreAddonButton(self))
         self.verticalLayout_4.insertWidget(0, VoteButton(self, ADDON_CD))
 
