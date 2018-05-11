@@ -15,7 +15,7 @@ from ..lib.constant import __version__, ADDON_CD
 from ..lib.lang import _
 from ..lib.sounds import START
 from ..lib.kkLib import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor, VoteButton
-
+from .Config import ConfigDialog
 
 class OneClock(QDialog, Ui_TomatoClockDlg):
 
@@ -77,7 +77,7 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
 
         self.btn_setting.setIcon(QIcon(QPixmap(":/icon/setting.png")))
         self.btn_setting.setText("")
-        self.btn_setting.clicked.connect(partial(ConfigEditor(mw, UserConfig.media_json_file).exec_))
+        self.btn_setting.clicked.connect(partial(ConfigDialog(self,).exec_))
 
         self.updater = AddonUpdater(
             self,
