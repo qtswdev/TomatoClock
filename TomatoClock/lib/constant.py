@@ -5,9 +5,9 @@ from anki.lang import currentLang
 
 ADDON_CD = 1608644302
 HAS_SET_UP = False
-DEBUG = True
+DEBUG = False
 MIN_SECS = 1 if DEBUG else 60
-__version__ = "0.2.34"
+__version__ = "0.3.01"
 STATISTICS_PY = "https://raw.githubusercontent.com/upday7/TomatoClock/master/TomatoClock/lib/tomatostats.py"
 REST_MINS = 5
 
@@ -116,6 +116,18 @@ UPDATE_LOGS = (
         """ if currentLang == 'zh_CN' else """
         <ol>
             <li>Fixed: Some Bugs</li>
+        </ol>"""
+    ),
+    (
+        "0.3.01", u"""
+        <ol>
+            <li>新增：现在可以同时使用正常的Anki模式了，番茄模式请选择“番茄时钟”按钮。</li>
+            <li>新增：全新的设置界面，现在您可以配置自己的番茄时间了。</li>
+            </ol>
+        """ if currentLang == 'zh_CN' else """
+        <ol>
+            <li>Added: You can now use the normal Anki mode for study, trigger "Tomato Clock" only when you want it.</li>
+            <li>Added: Configuration interface, you can now add your preferred tomato minutes and break minutes.</li>
         </ol>"""
     )
 

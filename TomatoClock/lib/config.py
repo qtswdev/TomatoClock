@@ -32,7 +32,8 @@ class UserConfig:
         "10MIN": 2,
         "15MIN": 3,
         "20MIN": 4,
-        "25MIN": 5
+        "25MIN": 5,
+        "50MIN": 10
     }
     SHOW_ANSWER_ON_CARD_TIMEOUT = True
     PLAY_SOUNDS = {

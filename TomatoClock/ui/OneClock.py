@@ -17,6 +17,7 @@ from ..lib.sounds import START
 from ..lib.kkLib import WeChatButton, AddonUpdater, UpgradeButton, MoreAddonButton, ConfigEditor, VoteButton
 from .Config import ConfigDialog
 
+
 class OneClock(QDialog, Ui_TomatoClockDlg):
 
     def __init__(self, parent):
@@ -75,9 +76,11 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         self.btn_donate.setText("")
         self.btn_donate.clicked.connect(partial(DialogDonate(mw).exec_))
 
+        self.config_dlg = ConfigDialog(self, )
+
         self.btn_setting.setIcon(QIcon(QPixmap(":/icon/setting.png")))
         self.btn_setting.setText("")
-        self.btn_setting.clicked.connect(partial(ConfigDialog(self,).exec_))
+        self.btn_setting.clicked.connect(self.on_config)
 
         self.updater = AddonUpdater(
             self,
@@ -102,11 +105,18 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
         self.btn_cancel.setText(_(self.btn_cancel.text()))
         list(
             map(
-                lambda item: item.setText(_(item.text())), self._min_items
+                lambda item: item.setText(u"{} {}".format(re.match("\d+", item.text()).group(),
+                                                          _("MIN"))), self._min_items
             )
         )
 
     def _adjust_min_list(self):
+        break_min_dicts = UserConfig.BREAK_MINUTES
+        sorted_keys = sorted(break_min_dicts.keys())
+
+        self.list_mis.clear()
+        self.list_mis.addItems(sorted_keys)
+
         # adjust item alignment
         list(map(
             lambda item: item.setTextAlignment(Qt.AlignCenter), self._min_items
@@ -117,6 +127,11 @@ class OneClock(QDialog, Ui_TomatoClockDlg):
     def on_mode_toggled(self, mode, toggled):
         if toggled:
             self.mode = mode
+
+    def on_config(self, _):
+        self.config_dlg.exec_()
+        self._adjust_min_list()
+        self._adjust_dialog()
 
     def exec_(self):
         if not self.updater.isRunning():
