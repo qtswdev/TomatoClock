@@ -138,7 +138,8 @@ class OneClockAddon:
 
     def on_tomato(self, from_timer=True):
         self.db.end_session()
-        self.tm.stop()
+        if self.tm:
+            self.tm.stop()
         self.pb_w.hide()
         self.pb.reset()
         if from_timer:
